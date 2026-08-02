@@ -1,0 +1,949 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Simran Desai UX engineering case study: transforming manual reservation-blocker triage into an explainable and actionable workflow." />
+  <link rel="icon" href="data:," />
+  <title>Order Intake — Simran Desai</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("clawpilotTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.55;
+    }
+    button, input { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--cp-link); }
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 3px;
+    }
+    .shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-overlay);
+      backdrop-filter: blur(12px);
+    }
+    .nav-inner {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .brand { color: var(--cp-text); text-decoration: none; font-weight: 800; }
+    .nav-links { display: flex; align-items: center; gap: 18px; }
+    .nav-links a { color: var(--cp-text-muted); text-decoration: none; font-size: 0.88rem; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 9px 14px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      text-decoration: none;
+      cursor: pointer;
+      font-weight: 750;
+    }
+    .button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
+    .button.primary { border-color: var(--cp-accent); background: var(--cp-accent); color: var(--cp-accent-fg); }
+    .button.primary:hover { background: var(--cp-accent-hover); color: var(--cp-accent-fg); }
+    .hero {
+      min-height: 730px;
+      padding: 96px 0 72px;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      align-items: center;
+      gap: 56px;
+    }
+    .eyebrow, .kicker {
+      margin: 0 0 14px;
+      color: var(--cp-accent);
+      font-size: 0.78rem;
+      font-weight: 850;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 24px;
+      font-size: clamp(3.5rem, 7vw, 6.6rem);
+      line-height: 0.94;
+      letter-spacing: -0.065em;
+    }
+    h1 span { color: var(--cp-accent); }
+    h2 {
+      max-width: 880px;
+      margin-bottom: 20px;
+      font-size: clamp(2.2rem, 4.7vw, 4.1rem);
+      line-height: 1.02;
+      letter-spacing: -0.047em;
+    }
+    h3 { line-height: 1.2; }
+    .hero-copy, .intro {
+      max-width: 780px;
+      color: var(--cp-text-muted);
+      font-size: 1.08rem;
+    }
+    .hero-copy { margin-bottom: 28px; font-size: clamp(1.08rem, 2vw, 1.3rem); }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .hero-map {
+      padding: 28px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-bg-elevated);
+    }
+    .map-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--cp-border);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+    .map-head span:last-child { color: var(--cp-success); }
+    .map-flow { display: grid; gap: 10px; margin-top: 18px; }
+    .map-node {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 13px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+    }
+    .map-node b {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 0.625rem;
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+    }
+    .map-node strong { display: block; }
+    .map-node small { color: var(--cp-text-muted); }
+    section { padding: 86px 0; }
+    .overview {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      overflow: hidden;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+    }
+    .fact {
+      min-height: 150px;
+      padding: 24px;
+      border-right: 1px solid var(--cp-border);
+    }
+    .fact:last-child { border-right: 0; }
+    .fact b {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--cp-accent);
+      font-size: 0.76rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .fact span { color: var(--cp-text-muted); }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 0.78fr 1.22fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .problem-stat {
+      position: sticky;
+      top: 96px;
+      padding: 30px;
+      border-radius: 16px;
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+    }
+    .problem-stat strong {
+      display: block;
+      margin-bottom: 12px;
+      font-size: clamp(2.8rem, 5vw, 4.6rem);
+      line-height: 0.95;
+    }
+    .problem-stat p { margin-bottom: 0; }
+    .cards { display: grid; gap: 14px; }
+    .card {
+      padding: 24px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+    }
+    .card h3 { margin-bottom: 7px; }
+    .card p { margin-bottom: 0; color: var(--cp-text-muted); }
+    .research-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .research-card {
+      min-height: 210px;
+      padding: 22px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+    }
+    .research-card b { display: block; margin-bottom: 9px; color: var(--cp-accent); }
+    .research-card p { margin-bottom: 0; color: var(--cp-text-muted); font-size: 0.92rem; }
+    .quote {
+      margin-top: 24px;
+      padding: 26px;
+      border-left: 5px solid var(--cp-accent);
+      background: var(--cp-surface);
+      font-size: 1.18rem;
+      font-weight: 700;
+    }
+    .quote span { display: block; margin-top: 8px; color: var(--cp-text-muted); font-size: 0.85rem; font-weight: 500; }
+    .flow-compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .flow {
+      padding: 24px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+    }
+    .flow h3 { color: var(--cp-accent); }
+    .flow ol { margin: 0; padding-left: 22px; color: var(--cp-text-muted); }
+    .flow li { padding: 7px 0; }
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .principle {
+      padding: 24px;
+      border-top: 4px solid var(--cp-accent);
+      border-radius: 0 0 16px 16px;
+      background: var(--cp-surface);
+    }
+    .principle b { display: block; margin-bottom: 8px; }
+    .principle p { margin-bottom: 0; color: var(--cp-text-muted); }
+    .prototype-wrap {
+      overflow: hidden;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+    }
+    .prototype-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-bg-elevated);
+    }
+    .mode-tabs { display: flex; gap: 8px; }
+    .mode-tab, .quick-filter {
+      padding: 9px 12px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      cursor: pointer;
+      font-weight: 750;
+    }
+    .mode-tab[aria-selected="true"], .quick-filter.active {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+    }
+    .prototype-grid {
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr) 330px;
+      min-height: 610px;
+    }
+    .filter-panel {
+      padding: 18px;
+      border-right: 1px solid var(--cp-border);
+      background: var(--cp-bg-elevated);
+    }
+    .filter-panel h3 { margin-bottom: 14px; font-size: 0.95rem; }
+    .field { margin-bottom: 13px; }
+    .field label { display: block; margin-bottom: 5px; color: var(--cp-text-muted); font-size: 0.75rem; font-weight: 750; }
+    .field input {
+      width: 100%;
+      padding: 9px 10px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+    }
+    .fake-select {
+      padding: 9px 10px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      font-size: 0.82rem;
+    }
+    .filter-note { margin-top: 18px; color: var(--cp-text-muted); font-size: 0.78rem; }
+    .workspace { min-width: 0; padding: 18px; }
+    .quick-filters { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
+    .quick-filter { padding: 7px 10px; font-size: 0.78rem; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--cp-border); border-radius: 0.625rem; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.78rem; }
+    th, td { padding: 11px 10px; border-bottom: 1px solid var(--cp-border); text-align: left; white-space: nowrap; }
+    th { background: var(--cp-surface-soft); color: var(--cp-text-muted); font-size: 0.72rem; }
+    tbody tr { cursor: pointer; }
+    tbody tr:hover, tbody tr.selected { background: var(--cp-accent-soft); }
+    tbody tr:last-child td { border-bottom: 0; }
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 750;
+    }
+    .status::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--cp-border-strong); }
+    .status.blocked::before { background: var(--cp-danger); }
+    .status.ready::before { background: var(--cp-success); }
+    .status.pending::before { background: var(--cp-warning); }
+    .status.no-approval::before { background: var(--cp-accent); }
+    .detail-panel {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-bg-elevated);
+    }
+    .detail-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .detail-heading h3 { margin-bottom: 0; }
+    .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .event {
+      min-height: 105px;
+      padding: 10px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+    }
+    .event b { display: block; margin-bottom: 4px; font-size: 0.75rem; }
+    .event span { color: var(--cp-text-muted); font-size: 0.7rem; }
+    .insight-panel {
+      padding: 18px;
+      border-left: 1px solid var(--cp-border);
+      background: var(--cp-bg-elevated);
+    }
+    .insight-panel h3 { margin-bottom: 8px; }
+    .insight-panel p, .insight-panel li { color: var(--cp-text-muted); font-size: 0.86rem; }
+    .insight-panel ul { padding-left: 18px; }
+    .agent-message {
+      margin: 15px 0;
+      padding: 13px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+    }
+    .agent-message b { display: block; margin-bottom: 5px; color: var(--cp-accent); font-size: 0.76rem; }
+    .resolve-box {
+      padding: 14px;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+    }
+    .resolve-box p { margin-bottom: 12px; }
+    .toast {
+      min-height: 22px;
+      margin-top: 10px;
+      color: var(--cp-success);
+      font-size: 0.8rem;
+      font-weight: 750;
+    }
+    .iterations { display: grid; gap: 12px; }
+    .iteration {
+      display: grid;
+      grid-template-columns: 130px 1fr 0.85fr;
+      gap: 20px;
+      padding: 20px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+    }
+    .iteration time { color: var(--cp-accent); font-weight: 850; }
+    .iteration p { margin-bottom: 0; color: var(--cp-text-muted); }
+    .iteration .outcome { padding-left: 18px; border-left: 1px solid var(--cp-border); }
+    .testing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .test {
+      padding: 22px;
+      border-left: 4px solid var(--cp-accent);
+      border-radius: 0 16px 16px 0;
+      background: var(--cp-surface);
+    }
+    .test small { display: block; margin-bottom: 7px; color: var(--cp-accent); font-weight: 800; }
+    .test b { display: block; margin-bottom: 6px; }
+    .test p { margin-bottom: 0; color: var(--cp-text-muted); font-size: 0.88rem; }
+    .contributions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .contribution {
+      padding: 22px;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+    }
+    .contribution b { display: block; margin-bottom: 8px; color: var(--cp-accent); }
+    .contribution p { margin-bottom: 0; color: var(--cp-text-muted); font-size: 0.9rem; }
+    .impact {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      overflow: hidden;
+      border: 1px solid var(--cp-border);
+      border-radius: 16px;
+      background: var(--cp-surface);
+    }
+    .impact-card {
+      min-height: 190px;
+      padding: 24px;
+      border-right: 1px solid var(--cp-border);
+    }
+    .impact-card:last-child { border-right: 0; }
+    .impact-card strong {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--cp-accent);
+      font-size: clamp(2.1rem, 4vw, 3.6rem);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+    .impact-card p { margin-bottom: 0; color: var(--cp-text-muted); font-size: 0.88rem; }
+    .reflection {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+    .closing {
+      margin: 64px auto 36px;
+      padding: 40px;
+      border-radius: 16px;
+      background: var(--cp-text);
+      color: var(--cp-bg);
+    }
+    .closing h2 { margin-bottom: 10px; }
+    .closing p { margin-bottom: 0; color: var(--cp-bg); }
+    footer { padding: 24px 0 40px; color: var(--cp-text-muted); font-size: 0.82rem; }
+    @media (max-width: 1020px) {
+      .hero, .problem-grid { grid-template-columns: 1fr; }
+      .hero { min-height: auto; }
+      .problem-stat { position: static; }
+      .overview { grid-template-columns: 1fr 1fr; }
+      .fact:nth-child(2) { border-right: 0; }
+      .fact:nth-child(-n+2) { border-bottom: 1px solid var(--cp-border); }
+      .research-grid, .contributions, .impact { grid-template-columns: 1fr 1fr; }
+      .impact-card:nth-child(2) { border-right: 0; }
+      .impact-card:nth-child(-n+2) { border-bottom: 1px solid var(--cp-border); }
+      .prototype-grid { grid-template-columns: 210px minmax(0, 1fr); }
+      .insight-panel { grid-column: 1 / -1; border-left: 0; border-top: 1px solid var(--cp-border); }
+    }
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 24px, 1160px); }
+      .nav-links a { display: none; }
+      h1 { font-size: clamp(3.2rem, 18vw, 5rem); }
+      section { padding: 64px 0; }
+      .overview, .research-grid, .flow-compare, .principles, .testing-grid, .contributions, .impact, .reflection { grid-template-columns: 1fr; }
+      .fact, .impact-card { border-right: 0; border-bottom: 1px solid var(--cp-border); }
+      .prototype-toolbar { align-items: flex-start; flex-direction: column; }
+      .prototype-grid { grid-template-columns: 1fr; }
+      .filter-panel { border-right: 0; border-bottom: 1px solid var(--cp-border); }
+      .timeline { grid-template-columns: 1fr 1fr; }
+      .iteration { grid-template-columns: 1fr; gap: 8px; }
+      .iteration .outcome { padding-left: 0; padding-top: 12px; border-left: 0; border-top: 1px solid var(--cp-border); }
+    }
+    @media print {
+      .nav, .actions, .prototype-toolbar button, .resolve-box .button { display: none; }
+      .hero { min-height: auto; padding-top: 36px; }
+      .prototype-grid { grid-template-columns: 1fr; }
+      .filter-panel, .insight-panel { border: 0; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="shell nav-inner">
+      <a class="brand" href="../">Simran Desai · UX Engineering</a>
+      <div class="nav-links">
+        <a href="#research">Research</a>
+        <a href="#prototype">Experience</a>
+        <a href="#testing">Testing</a>
+        <a href="#impact">Impact</a>
+        <a class="button" href="./engineering/">Engineering deep dive</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <header class="shell hero">
+      <div>
+        <p class="eyebrow">UX engineering case study · enterprise operations</p>
+        <h1>From blocker hunting to <span>guided resolution.</span></h1>
+        <p class="hero-copy">I led frontend UX engineering for an order-intake experience that helped operations teams understand why reservations were blocked, inspect the evidence, and act on eligible issues from one workflow.</p>
+        <div class="actions">
+          <a class="button primary" href="#research">Explore the process</a>
+          <a class="button" href="#prototype">Try the interactive experience</a>
+          <a class="button" href="./engineering/">See engineering details</a>
+        </div>
+      </div>
+      <aside class="hero-map">
+        <div class="map-head"><span>Reservation readiness workflow</span><span>● Shipped</span></div>
+        <div class="map-flow">
+          <div class="map-node"><b>01</b><div><strong>Find</strong><small>Search orders and narrow operational scope.</small></div></div>
+          <div class="map-node"><b>02</b><div><strong>Understand</strong><small>See status, blockers, evidence, and history.</small></div></div>
+          <div class="map-node"><b>03</b><div><strong>Decide</strong><small>Separate informational cases from fixable issues.</small></div></div>
+          <div class="map-node"><b>04</b><div><strong>Act</strong><small>Resolve eligible blockers and verify the result.</small></div></div>
+        </div>
+      </aside>
+    </header>
+
+    <div class="shell overview">
+      <div class="fact"><b>Role</b><span>Frontend UX engineering lead across research synthesis, interaction design, coded prototyping, implementation, and UAT</span></div>
+      <div class="fact"><b>Partners</b><span>Operations lead, backend engineers, planning subject-matter experts, and active users</span></div>
+      <div class="fact"><b>Timeline</b><span>Phase-one design and rollout from February–April 2026, followed by production enhancements</span></div>
+      <div class="fact"><b>Outcome</b><span>A unified explain-and-resolve workflow with filters, status, event history, exceptions, and conversational help</span></div>
+    </div>
+
+    <section class="shell">
+      <p class="kicker">01 · Problem</p>
+      <h2>Every blocker became a manual investigation across systems and teams.</h2>
+      <div class="problem-grid">
+        <aside class="problem-stat">
+          <strong>Multi-step</strong>
+          <p>Resolution depended on repeated investigation and handoffs across systems and partner teams.</p>
+        </aside>
+        <div class="cards">
+          <article class="card"><h3>Daily triage started with files</h3><p>Operations teams reviewed recurring extracts to identify demands that had not entered reservation.</p></article>
+          <article class="card"><h3>The reason was fragmented</h3><p>Status, exceptions, planning changes, and ownership lived in different tools and data sources.</p></article>
+          <article class="card"><h3>Every blocker had a different path</h3><p>Users had to know which partner team owned the issue and how that specific exception was resolved.</p></article>
+          <article class="card"><h3>Progress lived in messages</h3><p>Follow-ups, decisions, and verification were distributed across individual chats and email threads.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="research" class="shell">
+      <p class="kicker">02 · Embedded research</p>
+      <h2>I designed with the people doing the triage—not from a static requirements list.</h2>
+      <p class="intro">The research happened inside delivery: contextual questions, workflow walkthroughs, co-design messages, live demos, blocker-by-blocker UAT, production feedback, and debugging sessions with engineering partners.</p>
+      <div class="research-grid">
+        <article class="research-card"><b>Workflow inquiry</b><p>Mapped the current triage process, ownership handoffs, recurring questions, and criteria used to decide whether a demand belonged in scope.</p></article>
+        <article class="research-card"><b>Information architecture</b><p>Asked users which fields belonged in the grid, which attributes needed filters, and what status categories matched their mental model.</p></article>
+        <article class="research-card"><b>Collaborative UAT</b><p>Compared the UI against a shared validation sheet blocker by blocker to find missing records, incorrect states, and conflicting rules.</p></article>
+        <article class="research-card"><b>Production learning</b><p>Used live feedback, backend logs, and collaborative debugging to refine selection behavior, filtering, eligibility, loading, and error states.</p></article>
+      </div>
+      <div class="quote">The experience needed to explain why a demand had not started reservation and what happened before it reached that state.<span>The recurring operational question that anchored the experience.</span></div>
+    </section>
+
+    <section class="shell">
+      <p class="kicker">03 · Task-flow redesign</p>
+      <h2>Turn an open-ended investigation into a progressive decision path.</h2>
+      <div class="flow-compare">
+        <article class="flow">
+          <h3>Before</h3>
+          <ol>
+            <li>Open the daily triage file.</li>
+            <li>Search multiple systems for the demand.</li>
+            <li>Interpret status and exception fields.</li>
+            <li>Find the blocker owner.</li>
+            <li>Ask for an update through chat or email.</li>
+            <li>Track progress manually and verify resolution.</li>
+          </ol>
+        </article>
+        <article class="flow">
+          <h3>After</h3>
+          <ol>
+            <li>Search or filter the operational population.</li>
+            <li>Read a clear readiness status.</li>
+            <li>Inspect active exceptions and event history.</li>
+            <li>Ask for a plain-language explanation.</li>
+            <li>Switch to resolution for eligible blockers.</li>
+            <li>Apply the fix and see the updated state.</li>
+          </ol>
+        </article>
+      </div>
+    </section>
+
+    <section class="shell">
+      <p class="kicker">04 · Design principles</p>
+      <h2>Make scope, evidence, and action boundaries visible.</h2>
+      <div class="principles">
+        <article class="principle"><b>Use operational language</b><p>Status categories and filters reflect how planners already discuss readiness: blocked, ready, pending, completed, or missing approval.</p></article>
+        <article class="principle"><b>Separate explaining from fixing</b><p>Explicability and resolution share context, but each view optimizes for a different user intent and level of risk.</p></article>
+        <article class="principle"><b>Make action boundaries explicit</b><p>Only eligible rows can be selected, and already-remediated items become unavailable for repeat action.</p></article>
+      </div>
+    </section>
+
+    <section id="prototype" class="shell">
+      <p class="kicker">05 · Reconstructed experience</p>
+      <h2>Explore the two connected modes: understand and resolve.</h2>
+      <p class="intro">This interactive reconstruction shows the hierarchy and behaviors I designed. Choose a mode, filter the grid, and select a row to update the evidence panel.</p>
+      <div class="prototype-wrap">
+        <div class="prototype-toolbar">
+          <div class="mode-tabs" role="tablist" aria-label="Experience mode">
+            <button class="mode-tab" data-mode="explain" aria-selected="true">Explain a demand</button>
+            <button class="mode-tab" data-mode="resolve" aria-selected="false">Resolve eligible blockers</button>
+          </div>
+          <span id="mode-description">Understand status, exceptions, and history.</span>
+        </div>
+        <div class="prototype-grid">
+          <aside class="filter-panel">
+            <h3>Filter demands</h3>
+            <div class="field"><label for="search">Order or demand ID</label><input id="search" type="search" placeholder="Search…" /></div>
+            <div class="field"><label>Region</label><div class="fake-select">All regions</div></div>
+            <div class="field"><label>Resource type</label><div class="fake-select">All resource types</div></div>
+            <div class="field"><label>Planned date horizon</label><div class="fake-select">Next 13 weeks</div></div>
+            <div class="field"><label>Tags</label><div class="fake-select">Any tag</div></div>
+            <p class="filter-note">High-frequency status controls sit above the grid; attribute-heavy filters stay in the side panel.</p>
+          </aside>
+
+          <div class="workspace">
+            <div class="quick-filters" aria-label="Demand status filters">
+              <button class="quick-filter active" data-filter="all">All</button>
+              <button class="quick-filter" data-filter="blocked">Blocked</button>
+              <button class="quick-filter" data-filter="ready">Ready</button>
+              <button class="quick-filter" data-filter="pending">Pending</button>
+              <button class="quick-filter" data-filter="no-approval">No approval</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Demand</th><th>Status</th><th>Region</th><th>Planned date</th><th>Active blocker</th></tr></thead>
+                <tbody id="demand-rows"></tbody>
+              </table>
+            </div>
+            <div class="detail-panel" id="detail-panel">
+              <div class="detail-heading"><h3 id="detail-title">Demand DM-24871</h3><span class="status blocked" id="detail-status">Blocked</span></div>
+              <div class="timeline" id="event-timeline"></div>
+            </div>
+          </div>
+
+          <aside class="insight-panel">
+            <p class="kicker" id="insight-kicker">Explanation</p>
+            <h3 id="insight-title">The planned date is earlier than the facility-ready date.</h3>
+            <p id="insight-copy">Reservation cannot begin until the demand’s planned date meets the required readiness date.</p>
+            <div class="agent-message" id="agent-message"><b>Conversational assistance</b><span>“Why is this demand blocked?” returns the active exception and supporting dates without hiding the underlying evidence.</span></div>
+            <ul id="insight-list"><li>Current planned date: Aug 12</li><li>Earliest valid date: Aug 28</li><li>Action owner: Planning</li></ul>
+            <div class="resolve-box" id="resolve-box" hidden>
+              <p><strong>Proposed fix:</strong> Move the planned date to Aug 28.</p>
+              <button class="button primary" id="apply-fix">Apply eligible fix</button>
+              <div class="toast" id="toast" aria-live="polite"></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="shell">
+      <p class="kicker">06 · Product evolution</p>
+      <h2>The UI moved from a framework to a production decision tool.</h2>
+      <div class="iterations">
+        <article class="iteration"><time>Feb 2026</time><div><h3>Model the workflow</h3><p>Created the route, sidebar, grid, details area, and visual event history around early user questions.</p></div><p class="outcome"><strong>Reduced risk:</strong> established the interaction model before live data integration.</p></article>
+        <article class="iteration"><time>Late Feb</time><div><h3>Connect real operational data</h3><p>Integrated reservation-horizon data, dynamic columns, filter state, and selected-demand details.</p></div><p class="outcome"><strong>Reduced risk:</strong> tested the design against real data shape and integration contracts.</p></article>
+        <article class="iteration"><time>Early Mar</time><div><h3>Add evidence and explanation</h3><p>Connected exception data, status quick filters, event history, and the conversational panel.</p></div><p class="outcome"><strong>Improved trust:</strong> users could verify the explanation against records.</p></article>
+        <article class="iteration"><time>Mid Mar</time><div><h3>Add resolution</h3><p>Created a separate resolution tab, eligibility behavior, remediation results, and repeat-action prevention.</p></div><p class="outcome"><strong>Controlled risk:</strong> informational and action-oriented tasks stayed distinct.</p></article>
+        <article class="iteration"><time>Mar 20</time><div><h3>Harden core interactions</h3><p>Added richer filters, chip inputs, autocomplete, status logic, and collapsible grids before formal UAT.</p></div><p class="outcome"><strong>Improved control:</strong> dense operational dimensions became faster to scan and select.</p></article>
+        <article class="iteration"><time>Mar 24 onward</time><div><h3>Respond to UAT</h3><p>Added fixability, intent, and tag filters while aligning behavior across explicability and resolution views.</p></div><p class="outcome"><strong>Improved usability:</strong> documented UAT findings became shipped changes.</p></article>
+        <article class="iteration"><time>Apr–Jun</time><div><h3>Harden production workflows</h3><p>Corrected filtered selection, added auto-scroll and deep links, restored hidden fields, and clarified empty-history states.</p></div><p class="outcome"><strong>Improved continuity:</strong> later refinements preserved context across entry points and states.</p></article>
+      </div>
+    </section>
+
+    <section id="testing" class="shell">
+      <p class="kicker">07 · Evaluative testing</p>
+      <h2>UAT exposed where the system model and the user model diverged.</h2>
+      <div class="testing-grid">
+        <article class="test"><small>Blocker-by-blocker validation</small><b>Records were present in one view but missing in another</b><p>Aligned scope criteria and distinguished explainability from resolution populations.</p></article>
+        <article class="test"><small>Status-model feedback</small><b>“Blocked” and “ready” were not enough</b><p>Expanded the model to include completed, pending, and missing-approval states.</p></article>
+        <article class="test"><small>Policy change</small><b>Approval rules changed during delivery</b><p>Updated filters and status logic instead of leaving users to infer why records disappeared.</p></article>
+        <article class="test"><small>Production debugging</small><b>Filtered bulk selection sent more rows than expected</b><p>Corrected selection handling and made action scope easier to verify.</p></article>
+        <article class="test"><small>Interaction feedback</small><b>Users lost the selected row’s details below the grid</b><p>Added automatic focus and scroll to the evidence area.</p></article>
+        <article class="test"><small>Lifecycle feedback</small><b>Resolved items could invite duplicate action</b><p>Disabled completed remediation and clarified post-fix state.</p></article>
+      </div>
+    </section>
+
+    <section class="shell">
+      <p class="kicker">08 · My contribution</p>
+      <h2>I owned the experience across discovery, design, and implementation.</h2>
+      <div class="contributions">
+        <article class="contribution"><b>Research synthesis</b><p>Translated operational questions, process maps, validation sheets, and production feedback into design requirements.</p></article>
+        <article class="contribution"><b>Interaction design</b><p>Defined the dual-view architecture, status model, filters, grid hierarchy, detail flow, and action safeguards.</p></article>
+        <article class="contribution"><b>Frontend engineering</b><p>Built the Angular experience, dynamic data grids, event timeline, state, filters, and conversational-panel integration.</p></article>
+        <article class="contribution"><b>Cross-stack delivery</b><p>Partnered with backend engineers on data contracts, eligibility, remediation behavior, testing, release, and production debugging.</p></article>
+      </div>
+    </section>
+
+    <section id="impact" class="shell">
+      <p class="kicker">09 · Impact</p>
+      <h2>The work strengthened the path to an answer and supported the broader process improvement.</h2>
+      <div class="impact">
+        <article class="impact-card"><strong>Improved</strong><p>Stakeholder reporting showed better on-time performance across the broader phase-one process.</p></article>
+        <article class="impact-card"><strong>15</strong><p>Completed UI pull requests under the exact project title during the initial six-week design and rollout period.</p></article>
+        <article class="impact-card"><strong>1 workflow</strong><p>Search, status, exception evidence, event history, conversational explanation, and eligible resolution in one place.</p></article>
+        <article class="impact-card"><strong>Bulk action</strong><p>Supported resolving eligible blockers as a set instead of updating demands individually.</p></article>
+      </div>
+    </section>
+
+    <section class="shell">
+      <p class="kicker">10 · Reflection</p>
+      <h2>Complex enterprise UX depends on making business rules inspectable.</h2>
+      <div class="reflection">
+        <article class="card"><h3>What I learned</h3><p>A clear UI cannot compensate for invisible scope rules. Users need to see why a record appears, why it is excluded, and why an action is enabled.</p></article>
+        <article class="card"><h3>What I would improve</h3><p>I would establish event instrumentation and task-based usability measures earlier, then compare time-to-explanation and successful-remediation rates before and after launch.</p></article>
+      </div>
+    </section>
+
+    <div class="shell closing">
+      <p class="kicker">Takeaway</p>
+      <h2>I turned a rules-heavy operational process into a workflow people could understand, verify, and act on.</h2>
+      <p>The project demonstrates how I combine embedded research, interaction design, frontend engineering, and cross-system collaboration in high-complexity enterprise products.</p>
+    </div>
+  </main>
+
+  <footer class="shell"><p>&copy; 2026 Simran Desai</p></footer>
+
+  <script>
+    const demands = [
+      {
+        id: "DM-24871",
+        status: "blocked",
+        statusLabel: "Blocked",
+        region: "North",
+        date: "Aug 12",
+        blocker: "Readiness date conflict",
+        title: "The planned date is earlier than the facility-ready date.",
+        copy: "Reservation cannot begin until the demand’s planned date meets the required readiness date.",
+        bullets: ["Current planned date: Aug 12", "Earliest valid date: Aug 28", "Action owner: Planning"],
+        events: [["Order created", "Jul 18"], ["Plan updated", "Jul 26"], ["Blocker detected", "Aug 02"], ["Awaiting action", "Today"]]
+      },
+      {
+        id: "DM-25104",
+        status: "ready",
+        statusLabel: "Ready",
+        region: "West",
+        date: "Sep 03",
+        blocker: "None",
+        title: "No active blocker is preventing reservation.",
+        copy: "The demand is inside the planning horizon and currently meets the readiness rules.",
+        bullets: ["Approval: Active", "Active exceptions: 0", "Reservation start: Sep 03"],
+        events: [["Order created", "Jul 22"], ["Approval active", "Jul 29"], ["Checks passed", "Aug 03"], ["Ready", "Today"]]
+      },
+      {
+        id: "DM-25339",
+        status: "pending",
+        statusLabel: "Pending",
+        region: "East",
+        date: "Aug 21",
+        blocker: "Reservation in progress",
+        title: "Reservation has started but has not completed.",
+        copy: "No manual fix is recommended. The workflow is waiting for the downstream reservation process.",
+        bullets: ["Reservation started: Aug 05", "Last event: Requested", "Manual action: None"],
+        events: [["Order created", "Jul 12"], ["Checks passed", "Jul 31"], ["Reservation started", "Aug 05"], ["Pending", "Today"]]
+      },
+      {
+        id: "DM-25782",
+        status: "no-approval",
+        statusLabel: "No approval",
+        region: "South",
+        date: "Aug 19",
+        blocker: "Execution approval",
+        title: "The demand is not approved for execution.",
+        copy: "Reservation will not begin until the execution-approval state is active.",
+        bullets: ["Approval state: Draft", "Active exceptions: 0", "Action owner: Planning"],
+        events: [["Order created", "Jul 20"], ["Plan reviewed", "Jul 28"], ["Approval draft", "Aug 01"], ["Not executable", "Today"]]
+      }
+    ];
+
+    let currentMode = "explain";
+    let currentFilter = "all";
+    let selectedDemand = demands[0];
+
+    const rows = document.getElementById("demand-rows");
+    const search = document.getElementById("search");
+    const detailTitle = document.getElementById("detail-title");
+    const detailStatus = document.getElementById("detail-status");
+    const eventTimeline = document.getElementById("event-timeline");
+    const insightTitle = document.getElementById("insight-title");
+    const insightCopy = document.getElementById("insight-copy");
+    const insightList = document.getElementById("insight-list");
+    const insightKicker = document.getElementById("insight-kicker");
+    const agentMessage = document.getElementById("agent-message");
+    const resolveBox = document.getElementById("resolve-box");
+    const toast = document.getElementById("toast");
+    const modeDescription = document.getElementById("mode-description");
+
+    function renderRows() {
+      const term = search.value.trim().toLowerCase();
+      const visible = demands.filter((demand) => {
+        const matchesFilter = currentFilter === "all" || demand.status === currentFilter;
+        const matchesSearch = !term || demand.id.toLowerCase().includes(term) || demand.blocker.toLowerCase().includes(term);
+        const matchesMode = currentMode === "explain" || demand.status === "blocked";
+        return matchesFilter && matchesSearch && matchesMode;
+      });
+
+      rows.innerHTML = visible.map((demand) => `
+        <tr data-id="${demand.id}" class="${demand.id === selectedDemand.id ? "selected" : ""}" tabindex="0">
+          <td><strong>${demand.id}</strong></td>
+          <td><span class="status ${demand.status}">${demand.statusLabel}</span></td>
+          <td>${demand.region}</td>
+          <td>${demand.date}</td>
+          <td>${demand.blocker}</td>
+        </tr>
+      `).join("");
+
+      rows.querySelectorAll("tr").forEach((row) => {
+        const select = () => {
+          selectedDemand = demands.find((demand) => demand.id === row.dataset.id);
+          renderRows();
+          renderDetail();
+        };
+        row.addEventListener("click", select);
+        row.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            select();
+          }
+        });
+      });
+    }
+
+    function renderDetail() {
+      detailTitle.textContent = `Demand ${selectedDemand.id}`;
+      detailStatus.textContent = selectedDemand.statusLabel;
+      detailStatus.className = `status ${selectedDemand.status}`;
+      insightTitle.textContent = selectedDemand.title;
+      insightCopy.textContent = selectedDemand.copy;
+      insightList.innerHTML = selectedDemand.bullets.map((bullet) => `<li>${bullet}</li>`).join("");
+      eventTimeline.innerHTML = selectedDemand.events.map(([name, date]) => `<div class="event"><b>${name}</b><span>${date}</span></div>`).join("");
+      toast.textContent = "";
+
+      if (currentMode === "resolve") {
+        insightKicker.textContent = "Eligible resolution";
+        agentMessage.hidden = true;
+        resolveBox.hidden = selectedDemand.status !== "blocked";
+      } else {
+        insightKicker.textContent = "Explanation";
+        agentMessage.hidden = false;
+        resolveBox.hidden = true;
+      }
+    }
+
+    document.querySelectorAll(".mode-tab").forEach((tab) => {
+      tab.addEventListener("click", () => {
+        currentMode = tab.dataset.mode;
+        document.querySelectorAll(".mode-tab").forEach((item) => item.setAttribute("aria-selected", String(item === tab)));
+        modeDescription.textContent = currentMode === "explain"
+          ? "Understand status, exceptions, and history."
+          : "Act only on blockers that meet the approved rules.";
+        if (currentMode === "resolve" && selectedDemand.status !== "blocked") selectedDemand = demands[0];
+        currentFilter = "all";
+        document.querySelectorAll(".quick-filter").forEach((item) => item.classList.toggle("active", item.dataset.filter === "all"));
+        renderRows();
+        renderDetail();
+      });
+    });
+
+    document.querySelectorAll(".quick-filter").forEach((filter) => {
+      filter.addEventListener("click", () => {
+        currentFilter = filter.dataset.filter;
+        document.querySelectorAll(".quick-filter").forEach((item) => item.classList.toggle("active", item === filter));
+        renderRows();
+      });
+    });
+
+    search.addEventListener("input", renderRows);
+    document.getElementById("apply-fix").addEventListener("click", () => {
+      toast.textContent = "Fix submitted. The demand will update when remediation completes.";
+    });
+
+    renderRows();
+    renderDetail();
+  </script>
+</body>
+</html>
