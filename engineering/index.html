@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Engineering deep dive for Plan Insights, an enterprise analytics experience and reusable React canvas component system." />
+  <link rel="icon" href="data:," />
+  <title>Plan Insights — Engineering Deep Dive</title>
+  <script>
+    (() => {
+      const param = new URLSearchParams(window.location.search).get("clawpilotTheme");
+      const theme =
+        param || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+      document.documentElement.setAttribute("data-theme", theme);
+    })();
+  </script>
+  <style>
+    :root {
+      color-scheme: light;
+      --cp-bg: #f7f4ef;
+      --cp-bg-elevated: #fcfbf8;
+      --cp-surface: #ffffff;
+      --cp-surface-soft: #f5f5f5;
+      --cp-border: #dedede;
+      --cp-border-strong: #919191;
+      --cp-text: #242424;
+      --cp-text-muted: #5c5c5c;
+      --cp-text-soft: #6f6f6f;
+      --cp-accent: #b11f4b;
+      --cp-accent-hover: #9a1a41;
+      --cp-accent-soft: rgba(177, 31, 75, 0.08);
+      --cp-accent-fg: #ffffff;
+      --cp-success: #16a34a;
+      --cp-danger: #dc2626;
+      --cp-warning: #f59e0b;
+      --cp-link: #0078d4;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --cp-overlay: rgba(255, 255, 255, 0.8);
+      --cp-panel: rgba(255, 255, 255, 0.86);
+      --cp-panel-strong: rgba(255, 255, 255, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.55);
+      --cp-highlight: rgba(177, 31, 75, 0.12);
+    }
+    html[data-theme="dark"] {
+      color-scheme: dark;
+      --cp-bg: #3d3b3a;
+      --cp-bg-elevated: #343231;
+      --cp-surface: #292929;
+      --cp-surface-soft: #2e2e2e;
+      --cp-border: #474747;
+      --cp-border-strong: #5f5f5f;
+      --cp-text: #dedede;
+      --cp-text-muted: #919191;
+      --cp-text-soft: #b0b0b0;
+      --cp-accent: #fd8ea1;
+      --cp-accent-hover: #fb7b91;
+      --cp-accent-soft: rgba(253, 142, 161, 0.14);
+      --cp-accent-fg: #1a1a1a;
+      --cp-success: #4ade80;
+      --cp-danger: #f87171;
+      --cp-warning: #fbbf24;
+      --cp-link: #4da6ff;
+      --cp-shadow: 0 18px 48px rgba(0, 0, 0, 0.32);
+      --cp-overlay: rgba(41, 41, 41, 0.88);
+      --cp-panel: rgba(41, 41, 41, 0.72);
+      --cp-panel-strong: rgba(41, 41, 41, 0.96);
+      --cp-sheen: rgba(255, 255, 255, 0.04);
+      --cp-highlight: rgba(253, 142, 161, 0.12);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--cp-bg); color: var(--cp-text); font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.55; }
+    a { color: var(--cp-link); }
+    .shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
+    .nav { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--cp-border); background: var(--cp-overlay); backdrop-filter: blur(12px); }
+    .nav-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { color: var(--cp-text); text-decoration: none; font-weight: 800; }
+    .button { padding: 9px 13px; border: 1px solid var(--cp-border); border-radius: 0.625rem; background: var(--cp-surface); color: var(--cp-text); text-decoration: none; font-weight: 700; }
+    .hero { padding: 96px 0 72px; display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 52px; align-items: center; }
+    .eyebrow, .kicker { margin: 0 0 14px; color: var(--cp-accent); font-size: 0.78rem; font-weight: 850; letter-spacing: 0.12em; text-transform: uppercase; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { margin-bottom: 24px; font-size: clamp(3.3rem, 7vw, 6.5rem); line-height: 0.94; letter-spacing: -0.065em; }
+    h1 span { color: var(--cp-accent); }
+    h2 { max-width: 850px; margin-bottom: 20px; font-size: clamp(2.2rem, 4.6vw, 4rem); line-height: 1.02; letter-spacing: -0.047em; }
+    .dek, .intro { max-width: 780px; color: var(--cp-text-muted); font-size: 1.06rem; }
+    .hero-card { padding: 28px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-bg-elevated); box-shadow: var(--cp-shadow); }
+    .hero-card p { color: var(--cp-text-muted); }
+    section { padding: 86px 0; }
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); overflow: hidden; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); }
+    .stat { min-height: 160px; padding: 24px; border-right: 1px solid var(--cp-border); }
+    .stat:last-child { border-right: 0; }
+    .stat strong { display: block; margin-bottom: 10px; color: var(--cp-accent); font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1; }
+    .stat span { color: var(--cp-text-muted); font-size: 0.9rem; }
+    .architecture { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .arch { min-height: 180px; padding: 20px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); position: relative; }
+    .arch:not(:last-child)::after { content: "→"; position: absolute; right: -18px; top: 48%; z-index: 2; color: var(--cp-accent); font-weight: 900; }
+    .arch b { display: block; margin-bottom: 10px; color: var(--cp-accent); }
+    .arch span { color: var(--cp-text-muted); font-size: 0.84rem; }
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .card { padding: 24px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); }
+    .card b { display: inline-block; margin-bottom: 14px; padding: 5px 8px; border-radius: 0.625rem; background: var(--cp-accent-soft); color: var(--cp-accent); font-size: 0.74rem; }
+    .card p { margin-bottom: 0; color: var(--cp-text-muted); }
+    .timeline { display: grid; gap: 12px; }
+    .timeline article { display: grid; grid-template-columns: 150px 1fr; gap: 22px; padding: 20px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); }
+    .timeline time { color: var(--cp-accent); font-weight: 800; }
+    .timeline p { margin-bottom: 0; color: var(--cp-text-muted); }
+    .closing { margin: 60px auto 36px; padding: 40px; border-radius: 16px; background: var(--cp-text); color: var(--cp-bg); }
+    .closing p { margin-bottom: 0; color: var(--cp-bg); }
+    footer { padding: 24px 0 40px; color: var(--cp-text-muted); font-size: 0.82rem; }
+    @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .stats { grid-template-columns: 1fr 1fr; } .architecture { grid-template-columns: 1fr 1fr; } .arch:not(:last-child)::after { display: none; } .grid { grid-template-columns: 1fr; } }
+    @media (max-width: 640px) { .shell { width: min(100% - 24px, 1160px); } .stats, .architecture { grid-template-columns: 1fr; } .stat { border-right: 0; border-bottom: 1px solid var(--cp-border); } .timeline article { grid-template-columns: 1fr; gap: 5px; } }
+  </style>
+</head>
+<body>
+  <nav class="nav"><div class="shell nav-inner"><a class="brand" href="../">Simran Desai · Engineering Deep Dive</a><a class="button" href="../">Back to process</a></div></nav>
+  <main>
+    <header class="shell hero">
+      <div><p class="eyebrow">UX engineering · frontend systems · enterprise AI</p><h1>Building the product—and the <span>canvas beneath it.</span></h1><p class="dek">Plan Insights combined guided inputs, interactive visual analysis, synchronized AI explanation, and data traceability. The same use case drove reusable React components and event patterns for later canvas experiences.</p></div>
+      <aside class="hero-card"><p class="kicker">My contribution</p><h3>Product interaction + platform primitives</h3><p>I led requirements, interaction architecture, coded prototyping, React implementation, state, performance, and iterative production improvements.</p></aside>
+    </header>
+    <section class="shell"><p class="kicker">At a glance</p><h2>A feature-sized problem produced platform-sized leverage.</h2><div class="stats"><div class="stat"><strong>77</strong><span>matching authored PRs across repository history</span></div><div class="stat"><strong>65</strong><span>merged from the first template through June 2025</span></div><div class="stat"><strong>5+</strong><span>reusable interaction and visualization primitives</span></div><div class="stat"><strong>~20h</strong><span>business-review estimate of monthly time savings</span></div></div></section>
+    <section class="shell"><p class="kicker">Interaction architecture</p><h2>Structure high-consequence inputs; keep outputs composable.</h2><p class="intro">Explicit React controls established analytical scope, while service and template contracts determined the charts, grids, summaries, and trace experiences rendered on the canvas.</p><div class="architecture"><article class="arch"><b>01 · Intent</b><span>Template selection establishes the question.</span></article><article class="arch"><b>02 · Scope</b><span>Dates, snapshots, sessions, and filters define the comparison.</span></article><article class="arch"><b>03 · Analysis</b><span>Services return visuals, summaries, and trace requests.</span></article><article class="arch"><b>04 · Events</b><span>An event layer coordinates cross-widget updates.</span></article><article class="arch"><b>05 · Renderers</b><span>Reusable widgets compose the final experience.</span></article></div></section>
+    <section class="shell"><p class="kicker">Reusable component system</p><h2>The first use case became a library of repeatable patterns.</h2><div class="grid"><article class="card"><b>Selection</b><h3>Combo-box widget</h3><p>Canvas-aware selection, filtering, defaults, sizing, and change events.</p></article><article class="card"><b>Visualization</b><h3>Interactive graph</h3><p>Configurable chart types, series, labels, and click callbacks.</p></article><article class="card"><b>Analysis</b><h3>Pivot grid</h3><p>Grouping, aggregation, filtering, side panels, and detail events.</p></article><article class="card"><b>Evidence</b><h3>Citation and trace flow</h3><p>Connections from summaries and visual selections to supporting records.</p></article><article class="card"><b>Coordination</b><h3>Message and event contracts</h3><p>Decoupled feature orchestration from shared rendering components.</p></article><article class="card"><b>Scale</b><h3>Template configuration</h3><p>New datasets could vary behavior without cloning the full page flow.</p></article></div></section>
+    <section class="shell"><p class="kicker">Representative evolution</p><h2>Each increment reduced product risk or increased reuse.</h2><div class="timeline"><article><time>Dec 2024</time><div><h3>Basic analysis template</h3><p>Established the page structure and application–AI–canvas contract.</p></div></article><article><time>Jan 2025</time><div><h3>Interactive components and events</h3><p>Added reusable selection, chart callbacks, event coordination, and trace requests.</p></div></article><article><time>Feb–Apr 2025</time><div><h3>Pivot and live-session integration</h3><p>Built the full investigation path and hardened state and validation.</p></div></article><article><time>May–Jun 2025</time><div><h3>Visual-first, configurable, faster</h3><p>Improved trust and perceived performance through staged loading.</p></div></article><article><time>Jul 2025 onward</time><div><h3>Pattern reuse</h3><p>Rebased generic dataset comparison and later enhancements on the flow.</p></div></article></div></section>
+    <div class="shell closing"><p class="kicker">Engineering takeaway</p><h2>I used a real product need to define the reusable interaction model the platform was missing.</h2><p>That combination—product judgment, coded interaction design, and reusable frontend architecture—is the core of my UX engineering approach.</p></div>
+  </main>
+  <footer class="shell"><p>Portfolio-safe reconstruction. Internal datasets, links, identities, and implementation details are generalized.</p></footer>
+</body>
+</html>
