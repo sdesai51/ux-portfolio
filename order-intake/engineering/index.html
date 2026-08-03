@@ -1,9 +1,9 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Engineering deep dive for Simran Desai's Order Intake and reservation-explicability UX engineering case study." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Engineering notes for Simran Desai's Order Intake and reservation-explicability case study." />
   <link rel="icon" href="data:," />
   <title>Order Intake Engineering — Simran Desai</title>
   <script>
@@ -67,6 +67,7 @@
       --cp-sheen: rgba(255, 255, 255, 0.04);
       --cp-highlight: rgba(253, 142, 161, 0.12);
     }
+
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
@@ -74,453 +75,537 @@
       background: var(--cp-bg);
       color: var(--cp-text);
       font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
-      line-height: 1.55;
+      font-size: 16px;
+      line-height: 1.65;
     }
-    a { color: var(--cp-link); }
-    button, a { font: inherit; }
-    a:focus-visible, button:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 3px; }
-    .shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
-    .nav {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      border-bottom: 1px solid var(--cp-border);
-      background: var(--cp-overlay);
-      backdrop-filter: blur(12px);
-    }
-    .nav-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-    .brand { color: var(--cp-text); text-decoration: none; font-weight: 800; }
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 42px;
-      padding: 9px 14px;
-      border: 1px solid var(--cp-border);
-      border-radius: 0.625rem;
-      background: var(--cp-surface);
-      color: var(--cp-text);
-      text-decoration: none;
-      cursor: pointer;
-      font-weight: 750;
-    }
-    .button:hover { border-color: var(--cp-accent); color: var(--cp-accent); }
-    .hero {
-      min-height: 690px;
-      padding: 96px 0 72px;
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      align-items: center;
-      gap: 56px;
-    }
-    .eyebrow, .kicker {
-      margin: 0 0 14px;
-      color: var(--cp-accent);
-      font-size: 0.78rem;
-      font-weight: 850;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-    }
+    a { color: var(--cp-accent); text-decoration: none; }
+    a:hover { color: var(--cp-text); }
+    a:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 4px; }
     h1, h2, h3, p { margin-top: 0; }
-    h1 {
-      margin-bottom: 24px;
-      font-size: clamp(3.4rem, 7vw, 6.5rem);
-      line-height: 0.94;
-      letter-spacing: -0.065em;
+    p { margin-bottom: 1rem; }
+    .shell { width: min(1180px, calc(100% - 64px)); margin: 0 auto; }
+
+    .site-header {
+      padding-top: 1.5rem;
+      border-bottom: 5px solid var(--cp-accent);
+      background: var(--cp-bg);
     }
-    h1 span { color: var(--cp-accent); }
-    h2 {
-      max-width: 880px;
-      margin-bottom: 20px;
-      font-size: clamp(2.2rem, 4.7vw, 4.1rem);
-      line-height: 1.02;
-      letter-spacing: -0.047em;
+    .header-inner {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 2rem;
+      padding-bottom: 0.55rem;
     }
-    h3 { line-height: 1.2; }
-    .hero-copy, .intro { max-width: 790px; color: var(--cp-text-muted); font-size: 1.08rem; }
-    .hero-copy { margin-bottom: 28px; font-size: clamp(1.08rem, 2vw, 1.3rem); }
-    .hero-card {
-      padding: 26px;
-      border: 1px solid var(--cp-border);
-      border-radius: 16px;
-      background: var(--cp-bg-elevated);
-    }
-    .hero-card h3 { margin-bottom: 10px; }
-    .hero-card p { color: var(--cp-text-muted); }
-    .hero-stack { display: grid; gap: 9px; margin-top: 18px; }
-    .hero-layer {
-      padding: 12px 14px;
-      border: 1px solid var(--cp-border);
-      border-radius: 0.625rem;
-      background: var(--cp-surface);
-    }
-    .hero-layer b { display: block; color: var(--cp-accent); }
-    .hero-layer span { color: var(--cp-text-muted); font-size: 0.8rem; }
-    section { padding: 86px 0; }
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      overflow: hidden;
-      border: 1px solid var(--cp-border);
-      border-radius: 16px;
-      background: var(--cp-surface);
-    }
-    .stat { min-height: 160px; padding: 24px; border-right: 1px solid var(--cp-border); }
-    .stat:last-child { border-right: 0; }
-    .stat strong {
-      display: block;
-      margin-bottom: 10px;
-      color: var(--cp-accent);
-      font-size: clamp(2rem, 4vw, 3.5rem);
+    .name {
+      color: var(--cp-text);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 500;
+      letter-spacing: -0.055em;
       line-height: 1;
     }
-    .stat span { color: var(--cp-text-muted); font-size: 0.9rem; }
-    .architecture {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 12px;
+    .header-links {
+      display: flex;
+      gap: 1rem;
+      padding-bottom: 0.25rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-transform: lowercase;
     }
-    .arch {
-      position: relative;
-      min-height: 190px;
-      padding: 20px;
-      border: 1px solid var(--cp-border);
-      border-radius: 16px;
-      background: var(--cp-surface);
+
+    .title {
+      padding: 4.5rem 0 3.5rem;
+      border-bottom: 1px solid var(--cp-border-strong);
     }
-    .arch:not(:last-child)::after {
-      content: "→";
-      position: absolute;
-      top: 46%;
-      right: -18px;
-      z-index: 2;
+    .label {
+      margin-bottom: 0.75rem;
       color: var(--cp-accent);
-      font-weight: 900;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
-    .arch b { display: block; margin-bottom: 10px; color: var(--cp-accent); }
-    .arch span { color: var(--cp-text-muted); font-size: 0.84rem; }
-    .system-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-    .system-tab {
-      padding: 10px 14px;
-      border: 1px solid var(--cp-border);
+    h1 {
+      max-width: 900px;
+      margin-bottom: 1.25rem;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 450;
+      letter-spacing: -0.065em;
+      line-height: 0.98;
+    }
+    .subtitle {
+      max-width: 760px;
+      margin-bottom: 0;
+      color: var(--cp-text-muted);
+      font-size: clamp(1.12rem, 2.5vw, 1.4rem);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 4.5rem;
+      padding: 3.5rem 0 6rem;
+    }
+    .sidebar-inner { position: sticky; top: 1.5rem; }
+    .section-head {
+      margin: 0 0 1.1rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid var(--cp-border-strong);
+      color: var(--cp-text-soft);
+      font-size: 1.55rem;
+      font-weight: 500;
+      letter-spacing: -0.035em;
+      line-height: 1.2;
+      text-transform: lowercase;
+    }
+    .facts { margin: 0 0 2rem; }
+    .facts div { padding: 0.7rem 0; border-bottom: 1px solid var(--cp-border); }
+    .facts dt {
+      margin-bottom: 0.15rem;
+      color: var(--cp-accent);
+      font-size: 0.72rem;
+      font-weight: 750;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .facts dd {
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+    .section-nav { display: grid; gap: 0.5rem; font-size: 0.85rem; }
+    .section-nav a { color: var(--cp-text-muted); }
+    .section-nav a:hover { color: var(--cp-accent); }
+    .back-link {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.55rem 0.8rem;
+      border: 1px solid var(--cp-accent);
       border-radius: 0.625rem;
-      background: var(--cp-surface);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .back-link:hover { background: var(--cp-accent); color: var(--cp-accent-fg); }
+
+    .content { min-width: 0; }
+    .content section { margin-bottom: 4.5rem; scroll-margin-top: 2rem; }
+    .content h3 { margin-bottom: 0.4rem; font-size: 1.05rem; }
+    .lead {
       color: var(--cp-text);
-      cursor: pointer;
+      font-size: clamp(1.2rem, 2vw, 1.45rem);
+      line-height: 1.55;
+    }
+    .note {
+      margin: 1.75rem 0;
+      padding-left: 1.25rem;
+      border-left: 4px solid var(--cp-accent);
+      color: var(--cp-text-muted);
+      font-size: 1.04rem;
+    }
+
+    .architecture {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--cp-border-strong);
+    }
+    .architecture-row {
+      display: grid;
+      grid-template-columns: 42px 170px 1fr;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .architecture-row span {
+      color: var(--cp-accent);
+      font-size: 0.75rem;
       font-weight: 750;
     }
-    .system-tab[aria-selected="true"] { border-color: var(--cp-accent); background: var(--cp-accent); color: var(--cp-accent-fg); }
-    .system-panel {
+    .architecture-row b { font-weight: 700; }
+    .architecture-row p { margin: 0; color: var(--cp-text-muted); }
+
+    .mode-table {
       display: grid;
-      grid-template-columns: 0.8fr 1.2fr;
-      gap: 24px;
-      padding: 26px;
-      border: 1px solid var(--cp-border);
-      border-radius: 16px;
-      background: var(--cp-surface);
+      grid-template-columns: 190px 1fr 1fr;
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--cp-border-strong);
+      border-left: 1px solid var(--cp-border-strong);
     }
-    .system-panel p, .system-panel li { color: var(--cp-text-muted); }
-    .system-panel ul { padding-left: 20px; }
-    .state-flow { display: grid; gap: 10px; align-content: start; }
-    .state-node {
-      display: grid;
-      grid-template-columns: 120px 1fr;
-      gap: 12px;
-      padding: 13px;
-      border: 1px solid var(--cp-border);
-      border-radius: 0.625rem;
-      background: var(--cp-bg-elevated);
+    .mode-table > div {
+      min-height: 82px;
+      padding: 0.85rem;
+      border-right: 1px solid var(--cp-border-strong);
+      border-bottom: 1px solid var(--cp-border-strong);
     }
-    .state-node b { color: var(--cp-accent); }
-    .state-node span { color: var(--cp-text-muted); font-size: 0.84rem; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-    .card {
-      padding: 24px;
-      border: 1px solid var(--cp-border);
-      border-radius: 16px;
-      background: var(--cp-surface);
-    }
-    .card b {
-      display: inline-block;
-      margin-bottom: 13px;
-      padding: 5px 8px;
-      border-radius: 0.625rem;
-      background: var(--cp-accent-soft);
+    .mode-table .head {
       color: var(--cp-accent);
-      font-size: 0.74rem;
+      font-size: 0.8rem;
+      font-weight: 750;
+      text-transform: uppercase;
     }
-    .card p { margin-bottom: 0; color: var(--cp-text-muted); }
-    .timeline { display: grid; gap: 12px; }
+    .mode-table .row-label { font-weight: 700; }
+    .mode-table p { margin: 0; color: var(--cp-text-muted); font-size: 0.88rem; }
+
+    .decision-list {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--cp-border-strong);
+    }
+    .decision {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      gap: 1.5rem;
+      padding: 1.15rem 0;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .decision-label {
+      color: var(--cp-accent);
+      font-size: 0.76rem;
+      font-weight: 750;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .decision p { margin: 0; color: var(--cp-text-muted); }
+
+    .state-flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      margin: 1.5rem 0;
+      border-top: 1px solid var(--cp-border-strong);
+      border-left: 1px solid var(--cp-border-strong);
+    }
+    .state-flow div {
+      min-height: 140px;
+      padding: 1rem;
+      border-right: 1px solid var(--cp-border-strong);
+      border-bottom: 1px solid var(--cp-border-strong);
+    }
+    .state-flow span {
+      display: block;
+      margin-bottom: 1.5rem;
+      color: var(--cp-accent);
+      font-size: 0.72rem;
+      font-weight: 750;
+    }
+    .state-flow b { display: block; margin-bottom: 0.35rem; }
+    .state-flow p { margin: 0; color: var(--cp-text-muted); font-size: 0.85rem; }
+
+    .timeline { border-top: 1px solid var(--cp-border-strong); }
     .timeline article {
       display: grid;
-      grid-template-columns: 140px 1fr 0.7fr;
-      gap: 22px;
-      padding: 20px;
-      border: 1px solid var(--cp-border);
-      border-radius: 16px;
-      background: var(--cp-surface);
+      grid-template-columns: 120px 1fr;
+      gap: 1.5rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--cp-border);
     }
-    .timeline time { color: var(--cp-accent); font-weight: 850; }
-    .timeline p { margin-bottom: 0; color: var(--cp-text-muted); }
-    .timeline .risk { padding-left: 18px; border-left: 1px solid var(--cp-border); }
+    .timeline time {
+      color: var(--cp-accent);
+      font-size: 0.78rem;
+      font-weight: 750;
+      text-transform: uppercase;
+    }
+    .timeline p { margin: 0; color: var(--cp-text-muted); }
+
     .closing {
-      margin: 64px auto 36px;
-      padding: 40px;
-      border-radius: 16px;
-      background: var(--cp-text);
-      color: var(--cp-bg);
+      margin-bottom: 0;
+      padding-top: 2rem;
+      border-top: 5px solid var(--cp-accent);
     }
-    .closing h2 { margin-bottom: 10px; }
-    .closing p { margin-bottom: 0; color: var(--cp-bg); }
-    footer { padding: 24px 0 40px; color: var(--cp-text-muted); font-size: 0.82rem; }
-    @media (max-width: 960px) {
-      .hero, .system-panel { grid-template-columns: 1fr; }
-      .hero { min-height: auto; }
-      .stats { grid-template-columns: 1fr 1fr; }
-      .stat:nth-child(2) { border-right: 0; }
-      .stat:nth-child(-n+2) { border-bottom: 1px solid var(--cp-border); }
-      .architecture { grid-template-columns: 1fr 1fr; }
-      .arch:not(:last-child)::after { display: none; }
-      .grid { grid-template-columns: 1fr 1fr; }
+    .closing p { max-width: 760px; font-size: 1.2rem; }
+
+    footer {
+      padding: 1.5rem 0 2rem;
+      border-top: 1px solid var(--cp-border-strong);
+      color: var(--cp-text-muted);
+      font-size: 0.82rem;
     }
-    @media (max-width: 680px) {
-      .shell { width: min(100% - 24px, 1160px); }
-      h1 {
-        font-size: clamp(2.9rem, 16vw, 4.2rem);
-        overflow-wrap: anywhere;
-      }
-      section { padding: 64px 0; }
-      .stats, .architecture, .grid { grid-template-columns: 1fr; }
-      .stat { border-right: 0; border-bottom: 1px solid var(--cp-border); }
-      .timeline article { grid-template-columns: 1fr; gap: 8px; }
-      .timeline .risk { padding-left: 0; padding-top: 12px; border-left: 0; border-top: 1px solid var(--cp-border); }
-      .state-node { grid-template-columns: 1fr; gap: 3px; }
+    .footer-inner { display: flex; justify-content: space-between; gap: 1rem; }
+
+    @media (max-width: 900px) {
+      .shell { width: min(100% - 40px, 1180px); }
+      .layout { grid-template-columns: 1fr; gap: 3rem; }
+      .sidebar-inner { position: static; }
+      .section-nav { grid-template-columns: 1fr 1fr; }
+      .state-flow { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 24px, 1180px); }
+      .site-header { padding-top: 1rem; }
+      .header-inner { align-items: flex-start; flex-direction: column; gap: 0.8rem; }
+      .name { font-size: 2.25rem; }
+      .header-links { width: 100%; justify-content: space-between; }
+      .title { padding: 3rem 0 2.5rem; }
+      h1 { font-size: clamp(2.8rem, 14vw, 4.6rem); }
+      .layout { padding: 2.5rem 0 4rem; }
+      .architecture-row,
+      .decision,
+      .timeline article { grid-template-columns: 1fr; gap: 0.35rem; }
+      .mode-table { grid-template-columns: 1fr; border-top: 0; }
+      .mode-table .head { background: var(--cp-accent-soft); }
+      .state-flow { grid-template-columns: 1fr; }
+      .footer-inner { display: block; }
     }
   </style>
 </head>
 <body>
-  <nav class="nav">
-    <div class="shell nav-inner">
-      <a class="brand" href="../../">Simran Desai · Engineering Deep Dive</a>
-      <a class="button" href="../">Back to design process</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="name" href="../../">Simran Desai</a>
+      <nav class="header-links" aria-label="Page navigation">
+        <a href="../">case study</a>
+        <a href="../../">selected work</a>
+      </nav>
     </div>
-  </nav>
+  </header>
 
   <main>
-    <header class="shell hero">
-      <div>
-        <p class="eyebrow">UX engineering · Angular systems · operational workflows</p>
-        <h1>Engineering <span>explainability</span> into action.</h1>
-        <p class="hero-copy">The interface had to coordinate evolving data, dense filters, visual history, conversational assistance, and guarded remediation—without letting state drift across the workflow.</p>
-        <a class="button" href="../">Read the design case study</a>
-      </div>
-      <aside class="hero-card">
-        <p class="kicker">System objective</p>
-        <h3>Keep five layers synchronized</h3>
-        <p>A selected demand needed to drive every downstream surface while action eligibility and visible filtering remained trustworthy.</p>
-        <div class="hero-stack">
-          <div class="hero-layer"><b>Scope</b><span>Search, filters, horizon, and status.</span></div>
-          <div class="hero-layer"><b>Selection</b><span>Current row, selected IDs, and deep links.</span></div>
-          <div class="hero-layer"><b>Evidence</b><span>Exceptions, fields, and event history.</span></div>
-          <div class="hero-layer"><b>Action</b><span>Eligibility, remediation, and completed state.</span></div>
-          <div class="hero-layer"><b>Assistance</b><span>Context-aware conversational explanation.</span></div>
-        </div>
-      </aside>
+    <header class="shell title">
+      <p class="label">Order Intake / Engineering notes</p>
+      <h1>Engineering the workflow behind the explanation</h1>
+      <p class="subtitle">The interface had to coordinate changing data, dense filters, event history, conversational context, and guarded remediation without allowing state to drift across the page.</p>
     </header>
 
-    <section class="shell">
-      <p class="kicker">At a glance</p>
-      <h2>A product workflow implemented as a coordinated frontend system.</h2>
-      <div class="stats">
-        <div class="stat"><strong>15</strong><span>completed pull requests under the exact initial UI project title</span></div>
-        <div class="stat"><strong>22</strong><span>completed changes across the broader reviewed implementation set</span></div>
-        <div class="stat"><strong>64</strong><span>unique files touched across completed project changes</span></div>
-        <div class="stat"><strong>2 modes</strong><span>diagnostic explicability and guarded exception resolution</span></div>
-      </div>
-    </section>
+    <div class="shell layout">
+      <aside aria-label="Engineering summary">
+        <div class="sidebar-inner">
+          <h2 class="section-head">at a glance</h2>
+          <dl class="facts">
+            <div>
+              <dt>Frontend</dt>
+              <dd>Angular routed feature with componentized views, services, and focused stores</dd>
+            </div>
+            <div>
+              <dt>Data</dt>
+              <dd>Operational demand, exception, event-history, and remediation APIs</dd>
+            </div>
+            <div>
+              <dt>Interaction</dt>
+              <dd>Schema-driven grids, filters, deeplinks, detail panels, and bulk actions</dd>
+            </div>
+            <div>
+              <dt>Delivery</dt>
+              <dd>Initial release, collaborative UAT, and continued production hardening</dd>
+            </div>
+          </dl>
 
-    <section class="shell">
-      <p class="kicker">Architecture</p>
-      <h2>Separate responsibilities, then synchronize them through explicit state.</h2>
-      <p class="intro">The page evolved from an early visual prototype into a routed Angular feature composed of focused components, data services, stores, and event streams.</p>
-      <div class="architecture">
-        <article class="arch"><b>01 · Route shell</b><span>Owns the page modes, assistant activation, and entry-point context.</span></article>
-        <article class="arch"><b>02 · Query layer</b><span>Loads operational populations, exceptions, history, and remediation state.</span></article>
-        <article class="arch"><b>03 · State layer</b><span>Coordinates visible rows, selected records, filters, and completed actions.</span></article>
-        <article class="arch"><b>04 · Renderers</b><span>Builds schema-driven grids, status cells, details, and event diagrams.</span></article>
-        <article class="arch"><b>05 · Action layer</b><span>Validates eligibility, submits remediation, and exposes results.</span></article>
-      </div>
-    </section>
+          <nav class="section-nav" aria-label="Engineering sections">
+            <a href="#problem">technical problem</a>
+            <a href="#architecture">architecture</a>
+            <a href="#modes">shared foundation</a>
+            <a href="#decisions">key decisions</a>
+            <a href="#evolution">evolution</a>
+            <a href="#takeaway">takeaway</a>
+          </nav>
 
-    <section class="shell">
-      <p class="kicker">Connected systems</p>
-      <h2>Two user intents share a foundation without sharing every rule.</h2>
-      <div class="system-tabs" role="tablist" aria-label="Architecture mode">
-        <button class="system-tab" id="tab-shared" role="tab" data-panel="shared" aria-controls="system-panel" aria-selected="true" tabindex="0">Shared foundation</button>
-        <button class="system-tab" id="tab-explain" role="tab" data-panel="explain" aria-controls="system-panel" aria-selected="false" tabindex="-1">Explain mode</button>
-        <button class="system-tab" id="tab-resolve" role="tab" data-panel="resolve" aria-controls="system-panel" aria-selected="false" tabindex="-1">Resolve mode</button>
-      </div>
-      <div class="system-panel" id="system-panel" role="tabpanel" aria-labelledby="tab-shared">
-        <div>
-          <p class="kicker" id="panel-kicker">Shared foundation</p>
-          <h3 id="panel-title">A common context model keeps both modes aligned.</h3>
-          <p id="panel-copy">Search, filters, selected demand, dynamic columns, and details are reusable; the action layer adds stricter rules only when remediation is requested.</p>
-          <ul id="panel-list">
-            <li>Typed filters and server-driven data.</li>
-            <li>Selected-row and selected-ID coordination.</li>
-            <li>Shared formatting, links, and status renderers.</li>
-            <li>Consistent empty, loading, and error states.</li>
-          </ul>
+          <a class="back-link" href="../">Read the case study</a>
         </div>
-        <div class="state-flow" id="state-flow">
-          <div class="state-node"><b>Filters</b><span>Define the visible operational population.</span></div>
-          <div class="state-node"><b>Filtered rows</b><span>Drive counts and constrain bulk actions.</span></div>
-          <div class="state-node"><b>Selected demand</b><span>Updates details, event history, and assistant context.</span></div>
-          <div class="state-node"><b>Lifecycle state</b><span>Represents loading, empty, error, and completed outcomes.</span></div>
-        </div>
-      </div>
-    </section>
+      </aside>
 
-    <section class="shell">
-      <p class="kicker">Key engineering decisions</p>
-      <h2>The difficult work was protecting continuity and action safety.</h2>
-      <div class="grid">
-        <article class="card"><b>Schema evolution</b><h3>Generate grid behavior from API data</h3><p>Dynamic columns, friendly labels, date formatting, links, and filters reduced coupling to frequently changing operational fields.</p></article>
-        <article class="card"><b>State coordination</b><h3>Use focused stores instead of one page-wide object</h3><p>Selected rows, visible data, selected IDs, and remediated IDs could evolve independently while staying synchronized.</p></article>
-        <article class="card"><b>Bulk-action safety</b><h3>Constrain actions to visible and eligible records</h3><p>A production refinement ensured filtered-out rows could not remain silently selected for remediation.</p></article>
-        <article class="card"><b>Workflow continuity</b><h3>Preserve context across entry points</h3><p>Deep links, auto-scroll, and selected-demand state connected navigation, grids, details, history, and assistance.</p></article>
-        <article class="card"><b>Lifecycle semantics</b><h3>Distinguish empty domain data from failure</h3><p>“No reservation history” became an understandable state rather than a generic error-shaped experience.</p></article>
-        <article class="card"><b>Assistant readiness</b><h3>Wait for initialization before selecting context</h3><p>The page prevented race conditions between the routed experience and the conversational assistant.</p></article>
-      </div>
-    </section>
+      <article class="content">
+        <section id="problem" aria-labelledby="problem-heading">
+          <h2 class="section-head" id="problem-heading">the technical problem</h2>
+          <p class="lead">This page was less a dashboard than a coordination problem.</p>
+          <p>Filters defined the visible operational population. Row selection updated details, exception evidence, reservation history, and conversational context. Resolution added another layer of eligibility, prior-action state, approval, and results.</p>
+          <p>Any one of those pieces could work in isolation and still leave the workflow feeling unreliable if the state between them drifted.</p>
+          <p class="note">My engineering goal was to make the frontend an explicit contract between business rules and what the user could safely see or do.</p>
+        </section>
 
-    <section class="shell">
-      <p class="kicker">Implementation evolution</p>
-      <h2>Each stage reduced a different class of product risk.</h2>
-      <div class="timeline">
-        <article><time>Foundation</time><div><h3>Route, components, stores, and event visualization</h3><p>Decomposed the early page into a sidebar, grid, details area, services, state, and flowchart renderer.</p></div><p class="risk"><strong>Risk reduced:</strong> monolithic UI architecture.</p></article>
-        <article><time>Live data</time><div><h3>Operational APIs and dynamic columns</h3><p>Moved from prototype data to evolving backend contracts while keeping the presentation layer adaptable.</p></div><p class="risk"><strong>Risk reduced:</strong> design assumptions that failed against real schemas.</p></article>
-        <article><time>Evidence</time><div><h3>Exceptions, status, and conversational context</h3><p>Added scannable status, quick filters, supporting records, and assistant activation.</p></div><p class="risk"><strong>Risk reduced:</strong> explanations without verifiable evidence.</p></article>
-        <article><time>Action</time><div><h3>Resolution, eligibility, and results</h3><p>Added a separate remediation workflow with disabled states and prior-action awareness.</p></div><p class="risk"><strong>Risk reduced:</strong> unsafe or duplicate action.</p></article>
-        <article><time>UAT</time><div><h3>Filtering and workflow alignment</h3><p>Aligned fixability, intent, and tag filters across the diagnostic and action modes.</p></div><p class="risk"><strong>Risk reduced:</strong> inconsistent populations and user expectations.</p></article>
-        <article><time>Production</time><div><h3>Selection, navigation, and domain states</h3><p>Hardened filtered selections, auto-scroll, deep links, hidden fields, and empty-history behavior.</p></div><p class="risk"><strong>Risk reduced:</strong> context loss and misleading system feedback.</p></article>
-      </div>
-    </section>
+        <section id="architecture" aria-labelledby="architecture-heading">
+          <h2 class="section-head" id="architecture-heading">architecture</h2>
+          <p>I separated the feature into layers with narrow responsibilities, then synchronized them through explicit state and event streams.</p>
 
-    <section class="shell">
-      <p class="kicker">UX engineering takeaway</p>
-      <h2>The frontend became the contract between business rules and user confidence.</h2>
-      <div class="grid">
-        <article class="card"><b>Product judgment</b><h3>Not every shared dataset should create a shared workflow</h3><p>Diagnostic and remediation experiences reuse infrastructure while preserving different eligibility and lifecycle rules.</p></article>
-        <article class="card"><b>Technical judgment</b><h3>State should describe what the user can safely do</h3><p>Visible rows, eligibility, prior remediation, and selected IDs became explicit state rather than implicit component behavior.</p></article>
-        <article class="card"><b>Delivery judgment</b><h3>Small production fixes can carry large usability value</h3><p>Auto-scroll, empty states, deep links, and restored filters improved the continuity of real operational tasks.</p></article>
-      </div>
-    </section>
+          <div class="architecture">
+            <div class="architecture-row">
+              <span>01</span>
+              <b>Routed feature shell</b>
+              <p>Owned the active mode, side navigation, page-level layout, deeplink input, and feature lifecycle.</p>
+            </div>
+            <div class="architecture-row">
+              <span>02</span>
+              <b>Query services</b>
+              <p>Loaded demand populations, exceptions, reservation history, and remediation state through separate contracts.</p>
+            </div>
+            <div class="architecture-row">
+              <span>03</span>
+              <b>Focused stores</b>
+              <p>Tracked filtered rows, selected rows, selected IDs, and remediated IDs without one page-wide mutable object.</p>
+            </div>
+            <div class="architecture-row">
+              <span>04</span>
+              <b>Renderers</b>
+              <p>Built schema-driven grids, status cells, details, empty states, and the event-history visualization.</p>
+            </div>
+            <div class="architecture-row">
+              <span>05</span>
+              <b>Action layer</b>
+              <p>Applied eligibility, constrained bulk selection, submitted remediation, and represented completed outcomes.</p>
+            </div>
+          </div>
+        </section>
 
-    <div class="shell closing">
-      <p class="kicker">Engineering takeaway</p>
-      <h2>I built the interaction model and the frontend system required to keep it trustworthy.</h2>
-      <p>The result combines Angular architecture, data-rich interaction design, explicit state, guarded actions, and iterative production hardening.</p>
+        <section id="modes" aria-labelledby="modes-heading">
+          <h2 class="section-head" id="modes-heading">two modes, one foundation</h2>
+          <p>Explicability and resolution shared data and context, but they did not share every rule. I resisted collapsing them into one generic workflow.</p>
+
+          <div class="mode-table" aria-label="Shared and mode-specific responsibilities">
+            <div class="head">Responsibility</div>
+            <div class="head">Explain</div>
+            <div class="head">Resolve</div>
+
+            <div class="row-label">Population</div>
+            <div><p>Show demands relevant to investigation.</p></div>
+            <div><p>Further constrain to demands eligible for action.</p></div>
+
+            <div class="row-label">Selection</div>
+            <div><p>One selected demand drives details, history, and assistant context.</p></div>
+            <div><p>One or many visible eligible demands can be selected.</p></div>
+
+            <div class="row-label">Primary evidence</div>
+            <div><p>Status, exception detail, planning fields, and meaningful events.</p></div>
+            <div><p>Proposed correction, prior remediation, approval, and result.</p></div>
+
+            <div class="row-label">Risk boundary</div>
+            <div><p>Misleading explanation or missing context.</p></div>
+            <div><p>Unsafe, duplicate, or out-of-scope action.</p></div>
+          </div>
+        </section>
+
+        <section aria-labelledby="state-heading">
+          <h2 class="section-head" id="state-heading">state follows the task</h2>
+          <p>The state model described what population the user was viewing, what they had selected, and what lifecycle state each dependent surface should show.</p>
+
+          <div class="state-flow" aria-label="Frontend state flow">
+            <div>
+              <span>01</span>
+              <b>Filters</b>
+              <p>Define the visible operational population.</p>
+            </div>
+            <div>
+              <span>02</span>
+              <b>Filtered rows</b>
+              <p>Drive counts and constrain bulk actions.</p>
+            </div>
+            <div>
+              <span>03</span>
+              <b>Selection</b>
+              <p>Updates details, history, and assistant context.</p>
+            </div>
+            <div>
+              <span>04</span>
+              <b>Lifecycle</b>
+              <p>Represents loading, empty, error, disabled, and completed outcomes.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="decisions" aria-labelledby="decisions-heading">
+          <h2 class="section-head" id="decisions-heading">key engineering decisions</h2>
+          <div class="decision-list">
+            <div class="decision">
+              <div class="decision-label">Schema evolution</div>
+              <div>
+                <h3>Generate grid behavior from API data.</h3>
+                <p>Dynamic columns, friendly labels, date formatting, links, and filters reduced coupling to frequently changing operational fields.</p>
+              </div>
+            </div>
+            <div class="decision">
+              <div class="decision-label">State coordination</div>
+              <div>
+                <h3>Use focused stores rather than one page-wide object.</h3>
+                <p>Selected rows, visible data, selected IDs, and remediated IDs could evolve independently while remaining synchronized.</p>
+              </div>
+            </div>
+            <div class="decision">
+              <div class="decision-label">Bulk-action safety</div>
+              <div>
+                <h3>Constrain actions to visible, eligible records.</h3>
+                <p>A production refinement ensured filtered-out rows could not remain silently selected for remediation.</p>
+              </div>
+            </div>
+            <div class="decision">
+              <div class="decision-label">Workflow continuity</div>
+              <div>
+                <h3>Preserve context across entry points.</h3>
+                <p>Deeplinks, auto-scroll, and selected-demand state connected navigation, grids, details, history, and assistance.</p>
+              </div>
+            </div>
+            <div class="decision">
+              <div class="decision-label">Lifecycle semantics</div>
+              <div>
+                <h3>Distinguish empty domain data from failure.</h3>
+                <p>“No reservation history” became an understandable state rather than a generic error-shaped experience.</p>
+              </div>
+            </div>
+            <div class="decision">
+              <div class="decision-label">Assistant readiness</div>
+              <div>
+                <h3>Wait for initialization before selecting context.</h3>
+                <p>The page prevented race conditions between the routed feature and its conversational assistant.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="evolution" aria-labelledby="evolution-heading">
+          <h2 class="section-head" id="evolution-heading">how the implementation evolved</h2>
+          <div class="timeline">
+            <article>
+              <time>Foundation</time>
+              <div>
+                <h3>Route, components, stores, and event history</h3>
+                <p>Decomposed the early page into a shell, sidebar, grid, details area, services, state, and visualization renderer.</p>
+              </div>
+            </article>
+            <article>
+              <time>Live data</time>
+              <div>
+                <h3>Operational APIs and dynamic columns</h3>
+                <p>Moved from prototype data to evolving contracts while keeping the presentation layer adaptable.</p>
+              </div>
+            </article>
+            <article>
+              <time>Evidence</time>
+              <div>
+                <h3>Exceptions, status, and conversational context</h3>
+                <p>Added scannable status, quick filters, supporting records, and assistant activation.</p>
+              </div>
+            </article>
+            <article>
+              <time>Action</time>
+              <div>
+                <h3>Resolution, eligibility, and results</h3>
+                <p>Added a separate remediation workflow with disabled states and prior-action awareness.</p>
+              </div>
+            </article>
+            <article>
+              <time>UAT</time>
+              <div>
+                <h3>Filtering and workflow alignment</h3>
+                <p>Aligned fixability, intent, and planning filters across diagnostic and action modes.</p>
+              </div>
+            </article>
+            <article>
+              <time>Production</time>
+              <div>
+                <h3>Selection, navigation, and domain states</h3>
+                <p>Hardened filtered selection, auto-scroll, deeplinks, hidden fields, and empty-history behavior.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="takeaway" class="closing" aria-labelledby="takeaway-heading">
+          <h2 class="section-head" id="takeaway-heading">engineering takeaway</h2>
+          <p>I built the interaction model and the frontend system required to keep it trustworthy. The most important technical choices were the ones that made scope, state, eligibility, and failure visible to the user.</p>
+        </section>
+      </article>
     </div>
   </main>
 
-  <footer class="shell"><p>&copy; 2026 Simran Desai</p></footer>
-
-  <script>
-    const panels = {
-      shared: {
-        kicker: "Shared foundation",
-        title: "A common context model keeps both modes aligned.",
-        copy: "Search, filters, selected demand, dynamic columns, and details are reusable; the action layer adds stricter rules only when remediation is requested.",
-        list: [
-          "Typed filters and server-driven data.",
-          "Selected-row and selected-ID coordination.",
-          "Shared formatting, links, and status renderers.",
-          "Consistent empty, loading, and error states."
-        ],
-        flow: [
-          ["Filters", "Define the visible operational population."],
-          ["Filtered rows", "Drive counts and constrain bulk actions."],
-          ["Selected demand", "Updates details, event history, and assistant context."],
-          ["Lifecycle state", "Represents loading, empty, error, and completed outcomes."]
-        ]
-      },
-      explain: {
-        kicker: "Explain mode",
-        title: "Selection becomes evidence and context—not an action request.",
-        copy: "The diagnostic mode prioritizes scannability and traceability. A row selection updates the demand details, exception evidence, event visualization, and assistant context.",
-        list: [
-          "Status renderers and quick-filter counts.",
-          "Dynamic details generated from selected-row data.",
-          "Exception records and visual event history.",
-          "Conversational questions scoped to the selected demand."
-        ],
-        flow: [
-          ["Select row", "Store the current demand and linked identifiers."],
-          ["Load evidence", "Fetch history, exceptions, and detail fields."],
-          ["Render history", "Translate event data into an understandable sequence."],
-          ["Set context", "Make the same demand available to conversational assistance."]
-        ]
-      },
-      resolve: {
-        kicker: "Resolve mode",
-        title: "The action path adds eligibility, filtered scope, and completed-state safeguards.",
-        copy: "Resolution reuses the same operational context but limits selection to fixable records, submits only visible eligible IDs, and prevents repeated remediation.",
-        list: [
-          "Eligibility-aware row selection.",
-          "Visible filtered rows define bulk-action scope.",
-          "Completed actions disable repeat selection.",
-          "Results and notifications expose the outcome."
-        ],
-        flow: [
-          ["Filter scope", "Narrow the population to the intended operational set."],
-          ["Check eligibility", "Enable only records covered by approved rules."],
-          ["Submit IDs", "Send visible, selected records to remediation."],
-          ["Record outcome", "Update result, timestamp, and disabled state."]
-        ]
-      }
-    };
-
-    const kicker = document.getElementById("panel-kicker");
-    const title = document.getElementById("panel-title");
-    const copy = document.getElementById("panel-copy");
-    const list = document.getElementById("panel-list");
-    const flow = document.getElementById("state-flow");
-    const systemPanel = document.getElementById("system-panel");
-    const tabs = [...document.querySelectorAll(".system-tab")];
-
-    const selectPanel = (tab) => {
-      const panel = panels[tab.dataset.panel];
-      tabs.forEach((item) => {
-        const selected = item === tab;
-        item.setAttribute("aria-selected", String(selected));
-        item.tabIndex = selected ? 0 : -1;
-      });
-      systemPanel.setAttribute("aria-labelledby", tab.id);
-      kicker.textContent = panel.kicker;
-      title.textContent = panel.title;
-      copy.textContent = panel.copy;
-      list.innerHTML = panel.list.map((item) => `<li>${item}</li>`).join("");
-      flow.innerHTML = panel.flow.map(([name, description]) => `<div class="state-node"><b>${name}</b><span>${description}</span></div>`).join("");
-    };
-
-    tabs.forEach((tab, index) => {
-      tab.addEventListener("click", () => selectPanel(tab));
-      tab.addEventListener("keydown", (event) => {
-        if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) return;
-        event.preventDefault();
-        const nextIndex =
-          event.key === "Home" ? 0 :
-          event.key === "End" ? tabs.length - 1 :
-          (index + (event.key === "ArrowRight" ? 1 : -1) + tabs.length) % tabs.length;
-        tabs[nextIndex].focus();
-        selectPanel(tabs[nextIndex]);
-      });
-    });
-  </script>
+  <footer>
+    <div class="shell footer-inner">
+      <span>&copy; 2026 Simran Desai</span>
+      <a href="../">Back to the case study</a>
+    </div>
+  </footer>
 </body>
 </html>
