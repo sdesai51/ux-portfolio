@@ -1,11 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Engineering deep dive for Plan Insights, an enterprise analytics experience and reusable React canvas component system." />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Engineering notes for Simran Desai's Plan Insights enterprise analytics experience and reusable React canvas component system." />
   <link rel="icon" href="data:," />
-  <title>Plan Insights — Engineering Deep Dive</title>
+  <title>Plan Insights Engineering — Simran Desai</title>
   <script>
     (() => {
       const param = new URLSearchParams(window.location.search).get("clawpilotTheme");
@@ -67,63 +67,508 @@
       --cp-sheen: rgba(255, 255, 255, 0.04);
       --cp-highlight: rgba(253, 142, 161, 0.12);
     }
+
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
-    body { margin: 0; background: var(--cp-bg); color: var(--cp-text); font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif; line-height: 1.55; }
-    a { color: var(--cp-link); }
-    .shell { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
-    .nav { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--cp-border); background: var(--cp-overlay); backdrop-filter: blur(12px); }
-    .nav-inner { min-height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-    .brand { color: var(--cp-text); text-decoration: none; font-weight: 800; }
-    .button { padding: 9px 13px; border: 1px solid var(--cp-border); border-radius: 0.625rem; background: var(--cp-surface); color: var(--cp-text); text-decoration: none; font-weight: 700; }
-    .hero { padding: 96px 0 72px; display: grid; grid-template-columns: 1.08fr 0.92fr; gap: 52px; align-items: center; }
-    .eyebrow, .kicker { margin: 0 0 14px; color: var(--cp-accent); font-size: 0.78rem; font-weight: 850; letter-spacing: 0.12em; text-transform: uppercase; }
+    body {
+      margin: 0;
+      background: var(--cp-bg);
+      color: var(--cp-text);
+      font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+    }
+    a { color: var(--cp-accent); text-decoration: none; }
+    a:hover { color: var(--cp-text); }
+    a:focus-visible {
+      outline: 3px solid var(--cp-accent);
+      outline-offset: 4px;
+    }
     h1, h2, h3, p { margin-top: 0; }
-    h1 { margin-bottom: 24px; font-size: clamp(3.3rem, 7vw, 6.5rem); line-height: 0.94; letter-spacing: -0.065em; }
-    h1 span { color: var(--cp-accent); }
-    h2 { max-width: 850px; margin-bottom: 20px; font-size: clamp(2.2rem, 4.6vw, 4rem); line-height: 1.02; letter-spacing: -0.047em; }
-    .dek, .intro { max-width: 780px; color: var(--cp-text-muted); font-size: 1.06rem; }
-    .hero-card { padding: 28px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-bg-elevated); box-shadow: var(--cp-shadow); }
-    .hero-card p { color: var(--cp-text-muted); }
-    section { padding: 86px 0; }
-    .stats { display: grid; grid-template-columns: repeat(4, 1fr); overflow: hidden; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); }
-    .stat { min-height: 160px; padding: 24px; border-right: 1px solid var(--cp-border); }
-    .stat:last-child { border-right: 0; }
-    .stat strong { display: block; margin-bottom: 10px; color: var(--cp-accent); font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1; }
-    .stat span { color: var(--cp-text-muted); font-size: 0.9rem; }
-    .architecture { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
-    .arch { min-height: 180px; padding: 20px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); position: relative; }
-    .arch:not(:last-child)::after { content: "→"; position: absolute; right: -18px; top: 48%; z-index: 2; color: var(--cp-accent); font-weight: 900; }
-    .arch b { display: block; margin-bottom: 10px; color: var(--cp-accent); }
-    .arch span { color: var(--cp-text-muted); font-size: 0.84rem; }
-    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-    .card { padding: 24px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); }
-    .card b { display: inline-block; margin-bottom: 14px; padding: 5px 8px; border-radius: 0.625rem; background: var(--cp-accent-soft); color: var(--cp-accent); font-size: 0.74rem; }
-    .card p { margin-bottom: 0; color: var(--cp-text-muted); }
-    .timeline { display: grid; gap: 12px; }
-    .timeline article { display: grid; grid-template-columns: 150px 1fr; gap: 22px; padding: 20px; border: 1px solid var(--cp-border); border-radius: 16px; background: var(--cp-surface); }
-    .timeline time { color: var(--cp-accent); font-weight: 800; }
-    .timeline p { margin-bottom: 0; color: var(--cp-text-muted); }
-    .closing { margin: 60px auto 36px; padding: 40px; border-radius: 16px; background: var(--cp-text); color: var(--cp-bg); }
-    .closing p { margin-bottom: 0; color: var(--cp-bg); }
-    footer { padding: 24px 0 40px; color: var(--cp-text-muted); font-size: 0.82rem; }
-    @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } .stats { grid-template-columns: 1fr 1fr; } .architecture { grid-template-columns: 1fr 1fr; } .arch:not(:last-child)::after { display: none; } .grid { grid-template-columns: 1fr; } }
-    @media (max-width: 640px) { .shell { width: min(100% - 24px, 1160px); } .stats, .architecture { grid-template-columns: 1fr; } .stat { border-right: 0; border-bottom: 1px solid var(--cp-border); } .timeline article { grid-template-columns: 1fr; gap: 5px; } }
+    p { margin-bottom: 1rem; }
+    .shell { width: min(1180px, calc(100% - 64px)); margin: 0 auto; }
+
+    .site-header {
+      padding-top: 1.5rem;
+      border-bottom: 5px solid var(--cp-accent);
+    }
+    .header-inner {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 2rem;
+      padding-bottom: 0.55rem;
+    }
+    .name {
+      color: var(--cp-text);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 500;
+      letter-spacing: -0.055em;
+      line-height: 1;
+    }
+    .header-links {
+      display: flex;
+      gap: 1rem;
+      padding-bottom: 0.25rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-transform: lowercase;
+    }
+
+    .title {
+      padding: 4.5rem 0 3.5rem;
+      border-bottom: 1px solid var(--cp-border-strong);
+    }
+    .label {
+      margin-bottom: 0.75rem;
+      color: var(--cp-accent);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    h1 {
+      max-width: 920px;
+      margin-bottom: 1.25rem;
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 450;
+      letter-spacing: -0.065em;
+      line-height: 0.98;
+    }
+    .subtitle {
+      max-width: 790px;
+      margin-bottom: 0;
+      color: var(--cp-text-muted);
+      font-size: clamp(1.12rem, 2.5vw, 1.4rem);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      gap: 4.5rem;
+      padding: 3.5rem 0 6rem;
+    }
+    .sidebar-inner { position: sticky; top: 1.5rem; }
+    .section-head {
+      margin: 0 0 1.1rem;
+      padding-bottom: 0.3rem;
+      border-bottom: 1px solid var(--cp-border-strong);
+      color: var(--cp-text-soft);
+      font-size: 1.55rem;
+      font-weight: 500;
+      letter-spacing: -0.035em;
+      line-height: 1.2;
+      text-transform: lowercase;
+    }
+    .facts { margin: 0 0 2rem; }
+    .facts div {
+      padding: 0.7rem 0;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .facts dt {
+      margin-bottom: 0.15rem;
+      color: var(--cp-accent);
+      font-size: 0.72rem;
+      font-weight: 750;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .facts dd {
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+    .section-nav {
+      display: grid;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+    .section-nav a { color: var(--cp-text-muted); }
+    .section-nav a:hover { color: var(--cp-accent); }
+    .back-link {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.55rem 0.8rem;
+      border: 1px solid var(--cp-accent);
+      border-radius: 0.625rem;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .back-link:hover {
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+    }
+
+    .content { min-width: 0; }
+    .content section {
+      margin-bottom: 4.5rem;
+      scroll-margin-top: 2rem;
+    }
+    .content h3 {
+      margin-bottom: 0.4rem;
+      font-size: 1.05rem;
+    }
+    .lead {
+      color: var(--cp-text);
+      font-size: clamp(1.2rem, 2vw, 1.45rem);
+      line-height: 1.55;
+    }
+    .note {
+      margin: 1.75rem 0;
+      padding-left: 1.25rem;
+      border-left: 4px solid var(--cp-accent);
+      color: var(--cp-text-muted);
+      font-size: 1.04rem;
+    }
+
+    .coordination-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--cp-border-strong);
+      border-left: 1px solid var(--cp-border-strong);
+    }
+    .coordination-grid div {
+      min-height: 130px;
+      padding: 1rem;
+      border-right: 1px solid var(--cp-border-strong);
+      border-bottom: 1px solid var(--cp-border-strong);
+    }
+    .coordination-grid b {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--cp-accent);
+    }
+    .coordination-grid p {
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: 0.9rem;
+    }
+
+    .architecture {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--cp-border-strong);
+    }
+    .architecture-row {
+      display: grid;
+      grid-template-columns: 42px 170px 1fr;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .architecture-row span {
+      color: var(--cp-accent);
+      font-size: 0.75rem;
+      font-weight: 750;
+    }
+    .architecture-row p {
+      margin: 0;
+      color: var(--cp-text-muted);
+    }
+
+    .components-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--cp-border-strong);
+      border-left: 1px solid var(--cp-border-strong);
+    }
+    .component {
+      min-height: 165px;
+      padding: 1rem;
+      border-right: 1px solid var(--cp-border-strong);
+      border-bottom: 1px solid var(--cp-border-strong);
+    }
+    .component-label {
+      display: block;
+      margin-bottom: 0.7rem;
+      color: var(--cp-accent);
+      font-size: 0.72rem;
+      font-weight: 750;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .component p {
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: 0.9rem;
+    }
+
+    .timeline {
+      border-top: 1px solid var(--cp-border-strong);
+    }
+    .timeline article {
+      display: grid;
+      grid-template-columns: 145px 1fr;
+      gap: 1.5rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .timeline time {
+      color: var(--cp-accent);
+      font-size: 0.78rem;
+      font-weight: 750;
+      text-transform: uppercase;
+    }
+    .timeline p {
+      margin: 0;
+      color: var(--cp-text-muted);
+    }
+
+    .closing {
+      margin-bottom: 0;
+      padding-top: 2rem;
+      border-top: 5px solid var(--cp-accent);
+    }
+    .closing p {
+      max-width: 780px;
+      font-size: 1.2rem;
+    }
+    footer {
+      padding: 1.5rem 0 2rem;
+      border-top: 1px solid var(--cp-border-strong);
+      color: var(--cp-text-muted);
+      font-size: 0.82rem;
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    @media (max-width: 900px) {
+      .shell { width: min(100% - 40px, 1180px); }
+      .layout { grid-template-columns: 1fr; gap: 3rem; }
+      .sidebar-inner { position: static; }
+      .section-nav { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 24px, 1180px); }
+      .site-header { padding-top: 1rem; }
+      .header-inner { align-items: flex-start; flex-direction: column; gap: 0.8rem; }
+      .name { font-size: 2.25rem; }
+      .header-links { width: 100%; justify-content: space-between; }
+      .title { padding: 3rem 0 2.5rem; }
+      h1 { font-size: clamp(2.8rem, 14vw, 4.6rem); }
+      .layout { padding: 2.5rem 0 4rem; }
+      .coordination-grid,
+      .components-grid { grid-template-columns: 1fr; }
+      .architecture-row,
+      .timeline article { grid-template-columns: 1fr; gap: 0.35rem; }
+      .footer-inner { display: block; }
+    }
   </style>
 </head>
 <body>
-  <nav class="nav"><div class="shell nav-inner"><a class="brand" href="../../">Simran Desai · Engineering Deep Dive</a><a class="button" href="../">Back to process</a></div></nav>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="name" href="../../">Simran Desai</a>
+      <nav class="header-links" aria-label="Page navigation">
+        <a href="../">case study</a>
+        <a href="../../">selected work</a>
+      </nav>
+    </div>
+  </header>
+
   <main>
-    <header class="shell hero">
-      <div><p class="eyebrow">UX engineering · frontend systems · enterprise AI</p><h1>Building the product—and the <span>canvas beneath it.</span></h1><p class="dek">Plan Insights combined guided inputs, interactive visual analysis, synchronized AI explanation, and data traceability. The same use case drove reusable React components and event patterns for later canvas experiences.</p></div>
-      <aside class="hero-card"><p class="kicker">My contribution</p><h3>Product interaction + platform primitives</h3><p>I led requirements, interaction architecture, coded prototyping, React implementation, state, performance, and iterative production improvements.</p></aside>
+    <header class="shell title">
+      <p class="label">Plan Insights / Engineering notes</p>
+      <h1>Building the product—and the canvas beneath it</h1>
+      <p class="subtitle">Plan Insights combined guided inputs, interactive visual analysis, synchronized AI explanation, and data traceability. The same use case drove reusable React components and event patterns for later canvas experiences.</p>
     </header>
-    <section class="shell"><p class="kicker">At a glance</p><h2>A feature-sized problem produced platform-sized leverage.</h2><div class="stats"><div class="stat"><strong>77</strong><span>matching authored PRs across repository history</span></div><div class="stat"><strong>65</strong><span>merged from the first template through June 2025</span></div><div class="stat"><strong>5+</strong><span>reusable interaction and visualization primitives</span></div><div class="stat"><strong>~20h</strong><span>business-review estimate of monthly time savings</span></div></div></section>
-    <section class="shell"><p class="kicker">Interaction architecture</p><h2>Structure high-consequence inputs; keep outputs composable.</h2><p class="intro">Explicit React controls established analytical scope, while service and template contracts determined the charts, grids, summaries, and trace experiences rendered on the canvas.</p><div class="architecture"><article class="arch"><b>01 · Intent</b><span>Template selection establishes the question.</span></article><article class="arch"><b>02 · Scope</b><span>Dates, snapshots, sessions, and filters define the comparison.</span></article><article class="arch"><b>03 · Analysis</b><span>Services return visuals, summaries, and trace requests.</span></article><article class="arch"><b>04 · Events</b><span>An event layer coordinates cross-widget updates.</span></article><article class="arch"><b>05 · Renderers</b><span>Reusable widgets compose the final experience.</span></article></div></section>
-    <section class="shell"><p class="kicker">Reusable component system</p><h2>The first use case became a library of repeatable patterns.</h2><div class="grid"><article class="card"><b>Selection</b><h3>Combo-box widget</h3><p>Canvas-aware selection, filtering, defaults, sizing, and change events.</p></article><article class="card"><b>Visualization</b><h3>Interactive graph</h3><p>Configurable chart types, series, labels, and click callbacks.</p></article><article class="card"><b>Analysis</b><h3>Pivot grid</h3><p>Grouping, aggregation, filtering, side panels, and detail events.</p></article><article class="card"><b>Evidence</b><h3>Citation and trace flow</h3><p>Connections from summaries and visual selections to supporting records.</p></article><article class="card"><b>Coordination</b><h3>Message and event contracts</h3><p>Decoupled feature orchestration from shared rendering components.</p></article><article class="card"><b>Scale</b><h3>Template configuration</h3><p>New datasets could vary behavior without cloning the full page flow.</p></article></div></section>
-    <section class="shell"><p class="kicker">Representative evolution</p><h2>Each increment reduced product risk or increased reuse.</h2><div class="timeline"><article><time>Dec 2024</time><div><h3>Basic analysis template</h3><p>Established the page structure and application–AI–canvas contract.</p></div></article><article><time>Jan 2025</time><div><h3>Interactive components and events</h3><p>Added reusable selection, chart callbacks, event coordination, and trace requests.</p></div></article><article><time>Feb–Apr 2025</time><div><h3>Pivot and live-session integration</h3><p>Built the full investigation path and hardened state and validation.</p></div></article><article><time>May–Jun 2025</time><div><h3>Visual-first, configurable, faster</h3><p>Improved trust and perceived performance through staged loading.</p></div></article><article><time>Jul 2025 onward</time><div><h3>Pattern reuse</h3><p>Rebased generic dataset comparison and later enhancements on the flow.</p></div></article></div></section>
-    <div class="shell closing"><p class="kicker">Engineering takeaway</p><h2>I used a real product need to define the reusable interaction model the platform was missing.</h2><p>That combination—product judgment, coded interaction design, and reusable frontend architecture—is the core of my UX engineering approach.</p></div>
+
+    <div class="shell layout">
+      <aside aria-label="Engineering summary">
+        <div class="sidebar-inner">
+          <h2 class="section-head">at a glance</h2>
+          <dl class="facts">
+            <div>
+              <dt>77 authored PRs</dt>
+              <dd>Matching changes across the broader repository history</dd>
+            </div>
+            <div>
+              <dt>65 merged</dt>
+              <dd>From the first template through June 2025</dd>
+            </div>
+            <div>
+              <dt>5+ primitives</dt>
+              <dd>Reusable interaction and visualization patterns</dd>
+            </div>
+            <div>
+              <dt>~20h/month</dt>
+              <dd>Business-review time-savings estimate, not measured telemetry</dd>
+            </div>
+          </dl>
+
+          <nav class="section-nav" aria-label="Engineering sections">
+            <a href="#problem">technical problem</a>
+            <a href="#architecture">architecture</a>
+            <a href="#components">component system</a>
+            <a href="#evolution">evolution</a>
+            <a href="#takeaway">takeaway</a>
+          </nav>
+
+          <a class="back-link" href="../">Read the case study</a>
+        </div>
+      </aside>
+
+      <article class="content">
+        <section id="problem" aria-labelledby="problem-heading">
+          <h2 class="section-head" id="problem-heading">the technical problem</h2>
+          <p class="lead">A feature-sized product problem required platform-sized coordination.</p>
+          <p>The experience had to establish analytical intent, scope a comparison, request analysis, render multiple forms of evidence, synchronize generated interpretation, and let users trace the answer back to supporting records.</p>
+          <p>I led requirements, interaction architecture, coded prototyping, React implementation, state, performance, and iterative production improvements.</p>
+
+          <div class="coordination-grid">
+            <div>
+              <b>Guided inputs</b>
+              <p>Templates, snapshots, sessions, dates, and filters established the exact analytical question.</p>
+            </div>
+            <div>
+              <b>Visual analysis</b>
+              <p>Charts and pivots needed configurable rendering plus selection and drill-down behavior.</p>
+            </div>
+            <div>
+              <b>Synchronized explanation</b>
+              <p>The narrative had to reflect the same scope and visible filters as the evidence.</p>
+            </div>
+            <div>
+              <b>Traceability</b>
+              <p>Visual selections and citations needed a path back to supporting records and likely drivers.</p>
+            </div>
+          </div>
+
+          <p class="note">The engineering goal was to keep high-consequence inputs explicit while allowing the canvas outputs to remain composable and reusable.</p>
+        </section>
+
+        <section id="architecture" aria-labelledby="architecture-heading">
+          <h2 class="section-head" id="architecture-heading">interaction architecture</h2>
+          <p>Explicit React controls established analytical scope, while service and template contracts determined the charts, grids, summaries, and trace experiences rendered on the canvas.</p>
+
+          <div class="architecture">
+            <div class="architecture-row">
+              <span>01</span>
+              <b>Intent</b>
+              <p>Template selection establishes the analytical question.</p>
+            </div>
+            <div class="architecture-row">
+              <span>02</span>
+              <b>Scope</b>
+              <p>Dates, snapshots, sessions, and filters define the comparison.</p>
+            </div>
+            <div class="architecture-row">
+              <span>03</span>
+              <b>Analysis</b>
+              <p>Services return visual data, summaries, citations, and trace requests.</p>
+            </div>
+            <div class="architecture-row">
+              <span>04</span>
+              <b>Events</b>
+              <p>An event layer coordinates selections and updates across widgets.</p>
+            </div>
+            <div class="architecture-row">
+              <span>05</span>
+              <b>Renderers</b>
+              <p>Reusable widgets compose the final canvas experience.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="components" aria-labelledby="components-heading">
+          <h2 class="section-head" id="components-heading">reusable component system</h2>
+          <p>The first use case became a library of repeatable patterns rather than a one-off page.</p>
+
+          <div class="components-grid">
+            <article class="component">
+              <span class="component-label">Selection</span>
+              <h3>Combo-box widget</h3>
+              <p>Canvas-aware selection, filtering, defaults, sizing, and change events.</p>
+            </article>
+            <article class="component">
+              <span class="component-label">Visualization</span>
+              <h3>Interactive graph</h3>
+              <p>Configurable chart types, series, labels, and click callbacks.</p>
+            </article>
+            <article class="component">
+              <span class="component-label">Analysis</span>
+              <h3>Pivot grid</h3>
+              <p>Grouping, aggregation, filtering, side panels, and detail events.</p>
+            </article>
+            <article class="component">
+              <span class="component-label">Evidence</span>
+              <h3>Citation and trace flow</h3>
+              <p>Connections from summaries and visual selections to supporting records.</p>
+            </article>
+            <article class="component">
+              <span class="component-label">Coordination</span>
+              <h3>Message and event contracts</h3>
+              <p>Decoupled feature orchestration from shared rendering components.</p>
+            </article>
+            <article class="component">
+              <span class="component-label">Scale</span>
+              <h3>Template configuration</h3>
+              <p>New datasets could vary behavior without cloning the full page flow.</p>
+            </article>
+          </div>
+        </section>
+
+        <section id="evolution" aria-labelledby="evolution-heading">
+          <h2 class="section-head" id="evolution-heading">representative evolution</h2>
+          <p>Each increment reduced product risk or increased the amount of the experience that could be reused.</p>
+
+          <div class="timeline">
+            <article>
+              <time>December 2024</time>
+              <div>
+                <h3>Basic analysis template</h3>
+                <p>Established the page structure and the application–AI–canvas contract.</p>
+              </div>
+            </article>
+            <article>
+              <time>January 2025</time>
+              <div>
+                <h3>Interactive components and events</h3>
+                <p>Added reusable selection, chart callbacks, event coordination, and trace requests.</p>
+              </div>
+            </article>
+            <article>
+              <time>February–April</time>
+              <div>
+                <h3>Pivot and live-session integration</h3>
+                <p>Built the full investigation path and hardened state and validation.</p>
+              </div>
+            </article>
+            <article>
+              <time>May–June</time>
+              <div>
+                <h3>Visual-first, configurable, and faster</h3>
+                <p>Improved trust and perceived performance through staged loading and configuration.</p>
+              </div>
+            </article>
+            <article>
+              <time>July onward</time>
+              <div>
+                <h3>Pattern reuse</h3>
+                <p>Rebased generic dataset comparison and later enhancements on the evolved flow.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section id="takeaway" class="closing" aria-labelledby="takeaway-heading">
+          <h2 class="section-head" id="takeaway-heading">engineering takeaway</h2>
+          <p>I used a real product need to define the reusable interaction model the platform was missing. That combination—product judgment, coded interaction design, and reusable frontend architecture—is the core of my UX engineering approach.</p>
+        </section>
+      </article>
+    </div>
   </main>
-  <footer class="shell"><p>&copy; 2026 Simran Desai</p></footer>
+
+  <footer>
+    <div class="shell footer-inner">
+      <span>&copy; 2026 Simran Desai</span>
+      <a href="../">Back to the case study</a>
+    </div>
+  </footer>
 </body>
 </html>
