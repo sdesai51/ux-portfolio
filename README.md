@@ -9,5 +9,7 @@ Static GitHub Pages portfolio for Simran Desai.
 - `/plan-insights/engineering/` — Plan Insights engineering deep dive
 - `/order-intake/` — Order Intake UX engineering case study
 - `/order-intake/engineering/` — Order Intake engineering deep dive
+- `/assets/simran-desai-resume-public.pdf` — Public résumé
+- `/assets/resume.html` — Accessible résumé source used to generate the PDF
 
 The legacy `/engineering/` route redirects to the Plan Insights engineering deep dive.

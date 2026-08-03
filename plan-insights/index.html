@@ -110,6 +110,7 @@
     }
     .header-links {
       display: flex;
+      flex-wrap: wrap;
       gap: 1rem;
       padding-bottom: 0.25rem;
       font-size: 0.92rem;
@@ -139,10 +140,92 @@
     }
     .subtitle {
       max-width: 790px;
-      margin-bottom: 0;
+      margin-bottom: 1.35rem;
       color: var(--cp-text-muted);
       font-size: clamp(1.12rem, 2.5vw, 1.45rem);
       line-height: 1.5;
+    }
+    .case-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+    }
+    .case-action {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0.55rem 0.85rem;
+      border: 1px solid var(--cp-accent);
+      border-radius: 0.625rem;
+      font-size: 0.78rem;
+      font-weight: 750;
+      text-transform: uppercase;
+    }
+    .case-action:hover {
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+    }
+    .case-action.secondary {
+      border-color: var(--cp-border-strong);
+      color: var(--cp-text);
+    }
+    .case-action.secondary:hover {
+      border-color: var(--cp-accent);
+      background: transparent;
+      color: var(--cp-accent);
+    }
+    .product-hero {
+      padding: 3rem 0;
+      border-bottom: 1px solid var(--cp-border-strong);
+    }
+    .product-hero .solution {
+      margin-top: 0;
+      background: var(--cp-surface);
+      box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
+    }
+    .hero-caption {
+      max-width: 850px;
+      margin: 0.85rem 0 0;
+      color: var(--cp-text-muted);
+      font-size: 0.88rem;
+    }
+    .evidence-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      margin: 1rem 0 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--cp-border-strong);
+      border-left: 1px solid var(--cp-border-strong);
+    }
+    .evidence-strip li {
+      min-height: 95px;
+      padding: 0.75rem;
+      border-right: 1px solid var(--cp-border-strong);
+      border-bottom: 1px solid var(--cp-border-strong);
+    }
+    .evidence-strip b {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: var(--cp-accent);
+      font-size: 1rem;
+    }
+    .evidence-strip span {
+      display: block;
+      color: var(--cp-text-muted);
+      font-size: 0.74rem;
+      line-height: 1.4;
+    }
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
     }
 
     .case-layout {
@@ -502,18 +585,22 @@
     }
     .bar-pair i:last-child { background: var(--cp-accent); }
     .data-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      width: 100%;
       margin-top: 0.65rem;
-      border-top: 1px solid var(--cp-border);
-      border-left: 1px solid var(--cp-border);
+      border-collapse: collapse;
+      table-layout: fixed;
+      text-align: left;
     }
-    .data-grid div {
+    .data-grid th,
+    .data-grid td {
       min-height: 38px;
       padding: 0.5rem;
-      border-right: 1px solid var(--cp-border);
-      border-bottom: 1px solid var(--cp-border);
+      border: 1px solid var(--cp-border);
       font-size: 0.7rem;
+    }
+    .data-grid th {
+      background: var(--cp-bg-elevated);
+      color: var(--cp-text);
     }
     .solution-insight .stage-date { margin-bottom: 0.7rem; }
     .solution-insight p,
@@ -615,6 +702,7 @@
         border-top: 1px solid var(--cp-border-strong);
         border-left: 0;
       }
+      .evidence-strip { grid-template-columns: 1fr 1fr; }
     }
     @media (max-width: 620px) {
       .shell { width: min(100% - 24px, 1180px); }
@@ -623,6 +711,7 @@
       .name { font-size: 2.25rem; }
       .header-links { width: 100%; justify-content: space-between; }
       .case-title { padding: 3rem 0 2.5rem; }
+      .product-hero { padding: 2rem 0; }
       h1 { font-size: clamp(2.8rem, 14vw, 4.6rem); }
       .case-layout { padding: 2.5rem 0 4rem; }
       .problem-layout,
@@ -635,8 +724,12 @@
       .reflection { grid-template-columns: 1fr; }
       .prototype-stage { grid-template-columns: 1fr; }
       .controls { grid-template-columns: 1fr; }
+      .evidence-strip { grid-template-columns: 1fr; }
       .outcome-list li { grid-template-columns: 1fr; gap: 0.35rem; }
       .footer-inner { display: block; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
@@ -647,6 +740,8 @@
       <nav class="header-links" aria-label="Page navigation">
         <a href="../">selected work</a>
         <a href="./engineering/">engineering notes</a>
+        <a href="../assets/simran-desai-resume-public.pdf">résumé</a>
+        <a href="mailto:sim.desai17@gmail.com">contact</a>
       </nav>
     </div>
   </header>
@@ -656,7 +751,56 @@
       <p class="project-label">Plan Insights / Enterprise analytics</p>
       <h1>Making plan changes explainable</h1>
       <p class="subtitle">I led UX engineering for an analytics experience that helped capacity planners compare snapshots, understand what changed, and trace why—then turned the interaction patterns into reusable React canvas components.</p>
+      <div class="case-actions" aria-label="Case study shortcuts">
+        <a class="case-action" href="#solution">View the final solution</a>
+        <a class="case-action secondary" href="#prototypes">See the process</a>
+      </div>
     </header>
+
+    <section class="shell product-hero" aria-labelledby="product-preview-heading">
+      <h2 class="visually-hidden" id="product-preview-heading">Final Plan Insights experience preview</h2>
+      <div class="solution">
+        <div class="solution-main">
+          <div class="controls">
+            <div class="control"><small>Template</small><strong>Regional trend</strong></div>
+            <div class="control"><small>Baseline</small><strong>Previous week</strong></div>
+            <div class="control"><small>Comparison</small><strong>Current week</strong></div>
+          </div>
+          <div class="solution-chart" aria-label="Comparison chart showing change between planning snapshots">
+            <div class="bar-pair"><i style="height:44%"></i><i style="height:61%"></i></div>
+            <div class="bar-pair"><i style="height:68%"></i><i style="height:87%"></i></div>
+            <div class="bar-pair"><i style="height:76%"></i><i style="height:63%"></i></div>
+            <div class="bar-pair"><i style="height:39%"></i><i style="height:72%"></i></div>
+          </div>
+          <table class="data-grid">
+            <thead>
+              <tr><th scope="col">Category</th><th scope="col">Baseline</th><th scope="col">Current</th><th scope="col">Delta</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Core demand</td><td>1,240</td><td>1,410</td><td>+170</td></tr>
+              <tr><td>Growth reserve</td><td>820</td><td>910</td><td>+90</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="solution-insight">
+          <p class="stage-date">Synchronized insight</p>
+          <h3>The increase is concentrated in two planning categories.</h3>
+          <p>The narrative reflects the same dates and filters visible in the chart.</p>
+          <ul>
+            <li>Select a bar to narrow scope.</li>
+            <li>Inspect supporting records.</li>
+            <li>Trace likely drivers.</li>
+          </ul>
+        </aside>
+      </div>
+      <p class="hero-caption">The final experience placed analytical scope, visual evidence, supporting records, and generated interpretation in one synchronized workflow.</p>
+      <ul class="evidence-strip" aria-label="Plan Insights evidence">
+        <li><b>160 → 10 min</b><span>Estimated recurring analysis cycle for supported questions</span></li>
+        <li><b>82% faster</b><span>Loading improvement after the data-first architecture refinement</span></li>
+        <li><b>~20h/month</b><span>Stakeholder estimate of recurring preparation time saved</span></li>
+        <li><b>6 patterns</b><span>Reusable React controls, charts, grids, and event flows</span></li>
+      </ul>
+    </section>
 
     <div class="shell case-layout">
       <aside class="sidebar" aria-label="Project summary">
@@ -697,11 +841,11 @@
       </aside>
 
       <article class="story">
-        <section aria-labelledby="summary-heading">
+        <section id="summary" aria-labelledby="summary-heading">
           <h2 class="section-head" id="summary-heading">the short version</h2>
           <p class="lead">The original problem was not a lack of data. It was the amount of work required to turn that data into a defensible explanation.</p>
           <p>Planners repeatedly downloaded files, rebuilt pivots, searched logs, and assembled answers by hand. I designed a guided comparison flow that made analytical scope explicit, showed visual evidence before generated interpretation, and kept supporting records close enough to verify the answer.</p>
-          <p>The use case also exposed missing interaction primitives in the shared AI canvas. I helped turn those product needs into reusable controls, charts, grids, events, citations, and template patterns for later experiences.</p>
+          <p>That use case also exposed missing interaction primitives in the shared AI canvas, so I turned the product needs into reusable controls, charts, grids, events, citations, and template patterns for later experiences.</p>
         </section>
 
         <section id="problem" aria-labelledby="problem-heading">
@@ -961,11 +1105,15 @@
                 <div class="bar-pair"><i style="height:76%"></i><i style="height:63%"></i></div>
                 <div class="bar-pair"><i style="height:39%"></i><i style="height:72%"></i></div>
               </div>
-              <div class="data-grid">
-                <div><b>Category</b></div><div><b>Baseline</b></div><div><b>Current</b></div><div><b>Delta</b></div>
-                <div>Core demand</div><div>1,240</div><div>1,410</div><div>+170</div>
-                <div>Growth reserve</div><div>820</div><div>910</div><div>+90</div>
-              </div>
+              <table class="data-grid">
+                <thead>
+                  <tr><th scope="col">Category</th><th scope="col">Baseline</th><th scope="col">Current</th><th scope="col">Delta</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Core demand</td><td>1,240</td><td>1,410</td><td>+170</td></tr>
+                  <tr><td>Growth reserve</td><td>820</td><td>910</td><td>+90</td></tr>
+                </tbody>
+              </table>
             </div>
             <aside class="solution-insight">
               <p class="stage-date">Synchronized insight</p>
@@ -1059,7 +1207,7 @@
   <footer>
     <div class="shell footer-inner">
       <span>&copy; 2026 Simran Desai</span>
-      <a href="../">Back to selected work</a>
+      <span><a href="mailto:sim.desai17@gmail.com">sim.desai17@gmail.com</a> · <a href="../assets/simran-desai-resume-public.pdf">Résumé</a> · <a href="../">Selected work</a></span>
     </div>
   </footer>
 

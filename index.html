@@ -111,6 +111,7 @@
     }
     .top-links {
       display: flex;
+      flex-wrap: wrap;
       gap: 0.7rem;
       align-items: center;
       padding-bottom: 0.25rem;
@@ -186,6 +187,36 @@
       max-width: 790px;
       color: var(--cp-text-muted);
     }
+    .intro-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-top: 1.5rem;
+    }
+    .action-link {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0.55rem 0.85rem;
+      border: 1px solid var(--cp-accent);
+      border-radius: 0.625rem;
+      font-size: 0.78rem;
+      font-weight: 750;
+      text-transform: uppercase;
+    }
+    .action-link:hover {
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+    }
+    .action-link.secondary {
+      border-color: var(--cp-border-strong);
+      color: var(--cp-text);
+    }
+    .action-link.secondary:hover {
+      border-color: var(--cp-accent);
+      background: transparent;
+      color: var(--cp-accent);
+    }
 
     .projects-section { scroll-margin-top: 1.5rem; }
     .project-list {
@@ -193,17 +224,17 @@
     }
     .project-entry {
       display: grid;
-      grid-template-columns: 230px minmax(0, 1fr);
-      gap: 1.5rem;
-      padding: 1.75rem 0;
+      grid-template-columns: minmax(300px, 0.82fr) minmax(0, 1fr);
+      gap: 2rem;
+      padding: 2rem 0;
       border-bottom: 1px solid var(--cp-border-strong);
     }
     .project-visual {
-      min-height: 185px;
+      min-height: 270px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      padding: 1rem;
+      gap: 0.75rem;
+      padding: 0.8rem;
       border: 1px solid var(--cp-border-strong);
       background: var(--cp-surface-soft);
     }
@@ -225,23 +256,134 @@
       font-size: 0.76rem;
       text-transform: uppercase;
     }
-    .mini-flow {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      border-top: 1px solid var(--cp-border-strong);
-      border-left: 1px solid var(--cp-border-strong);
+    .preview-window {
+      flex: 1;
+      overflow: hidden;
+      border: 1px solid var(--cp-border);
+      background: var(--cp-surface);
     }
-    .mini-flow span {
-      min-height: 48px;
-      display: grid;
-      place-items: center;
-      padding: 0.25rem;
-      border-right: 1px solid var(--cp-border-strong);
-      border-bottom: 1px solid var(--cp-border-strong);
+    .preview-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      min-height: 30px;
+      padding: 0.35rem 0.5rem;
+      border-bottom: 1px solid var(--cp-border);
+      background: var(--cp-bg-elevated);
       color: var(--cp-text-muted);
-      font-size: 0.6rem;
-      text-align: center;
+      font-size: 0.58rem;
+      font-weight: 700;
       text-transform: uppercase;
+    }
+    .preview-toolbar i {
+      width: 6px;
+      height: 6px;
+      display: inline-block;
+      margin-right: 0.18rem;
+      border-radius: 50%;
+      background: var(--cp-accent);
+    }
+    .plan-preview {
+      display: grid;
+      grid-template-columns: 0.68fr 1.32fr;
+      min-height: 178px;
+    }
+    .preview-controls {
+      padding: 0.55rem;
+      border-right: 1px solid var(--cp-border);
+      background: var(--cp-bg-elevated);
+    }
+    .preview-control {
+      margin-bottom: 0.4rem;
+      padding: 0.35rem;
+      border: 1px solid var(--cp-border);
+      background: var(--cp-surface);
+      color: var(--cp-text-muted);
+      font-size: 0.55rem;
+    }
+    .preview-analysis {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 0.45rem;
+      padding: 0.55rem;
+    }
+    .preview-chart {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      gap: 0.35rem;
+      min-height: 92px;
+      padding: 0.45rem 0.35rem 0;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .preview-chart span {
+      width: 10%;
+      background: var(--cp-border-strong);
+    }
+    .preview-chart span:nth-child(even) { background: var(--cp-accent); }
+    .preview-insight {
+      padding: 0.4rem;
+      border-left: 3px solid var(--cp-accent);
+      background: var(--cp-accent-soft);
+      color: var(--cp-text-muted);
+      font-size: 0.55rem;
+    }
+    .order-preview {
+      padding: 0.55rem;
+    }
+    .preview-pills {
+      display: flex;
+      gap: 0.3rem;
+      margin-bottom: 0.45rem;
+    }
+    .preview-pills span {
+      padding: 0.18rem 0.35rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      color: var(--cp-text-muted);
+      font-size: 0.5rem;
+    }
+    .preview-pills span:first-child {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent-soft);
+      color: var(--cp-accent);
+    }
+    .preview-table {
+      display: grid;
+      grid-template-columns: 0.8fr 0.65fr 1fr;
+      border-top: 1px solid var(--cp-border);
+      border-left: 1px solid var(--cp-border);
+    }
+    .preview-table span {
+      min-height: 27px;
+      padding: 0.3rem;
+      border-right: 1px solid var(--cp-border);
+      border-bottom: 1px solid var(--cp-border);
+      color: var(--cp-text-muted);
+      font-size: 0.5rem;
+    }
+    .preview-table .head {
+      background: var(--cp-bg-elevated);
+      font-weight: 750;
+      text-transform: uppercase;
+    }
+    .preview-detail {
+      display: grid;
+      grid-template-columns: 1fr 0.9fr;
+      gap: 0.45rem;
+      margin-top: 0.45rem;
+    }
+    .preview-detail div {
+      min-height: 54px;
+      padding: 0.4rem;
+      border: 1px solid var(--cp-border);
+      color: var(--cp-text-muted);
+      font-size: 0.52rem;
+    }
+    .preview-detail div:last-child {
+      border-left: 3px solid var(--cp-accent);
+      background: var(--cp-accent-soft);
     }
 
     .project-copy { min-width: 0; }
@@ -267,6 +409,33 @@
       font-size: 0.94rem;
     }
     .project-description strong { color: var(--cp-text); }
+    .project-proof {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      margin: 1.1rem 0 0;
+      padding: 0;
+      list-style: none;
+      border-top: 1px solid var(--cp-border);
+      border-left: 1px solid var(--cp-border);
+    }
+    .project-proof li {
+      min-height: 82px;
+      padding: 0.65rem;
+      border-right: 1px solid var(--cp-border);
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .project-proof b {
+      display: block;
+      margin-bottom: 0.2rem;
+      color: var(--cp-accent);
+      font-size: 0.94rem;
+    }
+    .project-proof span {
+      display: block;
+      color: var(--cp-text-muted);
+      font-size: 0.7rem;
+      line-height: 1.4;
+    }
     .project-links {
       display: flex;
       flex-wrap: wrap;
@@ -367,7 +536,7 @@
         grid-template-columns: 1fr 1fr;
         gap: 2rem;
       }
-      .project-entry { grid-template-columns: 190px minmax(0, 1fr); }
+      .project-entry { grid-template-columns: 280px minmax(0, 1fr); }
     }
 
     @media (max-width: 620px) {
@@ -380,9 +549,13 @@
       .sidebar { grid-template-columns: 1fr; gap: 0; }
       .intro { padding-bottom: 2.5rem; }
       .project-entry { grid-template-columns: 1fr; }
-      .project-visual { min-height: 170px; }
+      .project-visual { min-height: 260px; }
+      .project-proof { grid-template-columns: 1fr; }
       .approach-grid { grid-template-columns: 1fr; }
       .footer-inner { display: block; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
     }
   </style>
 </head>
@@ -394,6 +567,10 @@
         <a href="#work">work</a>
         <span aria-hidden="true">•</span>
         <a href="#approach">approach</a>
+        <span aria-hidden="true">•</span>
+        <a href="./assets/simran-desai-resume-public.pdf">résumé</a>
+        <span aria-hidden="true">•</span>
+        <a href="mailto:sim.desai17@gmail.com">contact</a>
       </nav>
     </div>
   </header>
@@ -417,6 +594,8 @@
           <ul class="elsewhere-list">
             <li><span>GitHub</span><a href="https://github.com/sdesai51">/sdesai51</a></li>
             <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/simrandesai/">/simrandesai</a></li>
+            <li><span>Email</span><a href="mailto:sim.desai17@gmail.com">say hello</a></li>
+            <li><span>Résumé</span><a href="./assets/simran-desai-resume-public.pdf">view PDF</a></li>
           </ul>
         </section>
       </div>
@@ -428,6 +607,10 @@
         <p class="intro-copy">I’m a software engineer who kept gravitating toward the space between a <strong>messy workflow</strong> and a usable product.</p>
         <p class="intro-detail">I like talking to the people doing the work, finding the point where a process stops making sense, and making the interaction concrete enough to test in code. Then I stay with it through implementation, UAT, production feedback, and the less glamorous fixes that make a product trustworthy.</p>
         <p class="intro-detail">Most of my recent work has been in complex internal systems where visual polish matters, but accurate states, understandable rules, and safe actions matter more.</p>
+        <div class="intro-actions" aria-label="Hiring links">
+          <a class="action-link" href="mailto:sim.desai17@gmail.com">Email me</a>
+          <a class="action-link secondary" href="./assets/simran-desai-resume-public.pdf">View résumé</a>
+        </div>
       </section>
 
       <section class="projects-section" id="work" aria-labelledby="work-heading">
@@ -437,15 +620,27 @@
           <article class="project-entry">
             <div class="project-visual" aria-hidden="true">
               <span class="project-number">01 / ANALYTICS</span>
-              <div>
-                <h3>Plan Insights</h3>
-                <span class="project-system">AI canvas · React</span>
-              </div>
-              <div class="mini-flow">
-                <span>scope</span>
-                <span>analyze</span>
-                <span>inspect</span>
-                <span>explain</span>
+              <div class="preview-window">
+                <div class="preview-toolbar">
+                  <span><i></i><i></i><i></i> Plan comparison</span>
+                  <span>AI canvas · React</span>
+                </div>
+                <div class="plan-preview">
+                  <div class="preview-controls">
+                    <div class="preview-control">Analysis · regional trend</div>
+                    <div class="preview-control">Baseline · previous week</div>
+                    <div class="preview-control">Compare · current week</div>
+                    <div class="preview-control">Filters · 2 applied</div>
+                  </div>
+                  <div class="preview-analysis">
+                    <div class="preview-chart">
+                      <span style="height:42%"></span><span style="height:58%"></span>
+                      <span style="height:63%"></span><span style="height:82%"></span>
+                      <span style="height:72%"></span><span style="height:61%"></span>
+                    </div>
+                    <div class="preview-insight">The visible increase is concentrated in two planning categories. Select a bar to inspect supporting records.</div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -454,6 +649,11 @@
               <p class="project-byline">Research synthesis · interaction design · React platform components</p>
               <p class="project-description">I designed and developed a capacity-operations analytics experience on an AI canvas. The work started with one investigation workflow and grew into reusable canvas components that other developers could use for their own experiences.</p>
               <p class="project-description"><strong>The interesting part:</strong> balancing guided analytical inputs, visual evidence, conversational explanation, and the needs of a shared frontend platform.</p>
+              <ul class="project-proof" aria-label="Plan Insights outcomes">
+                <li><b>160 → 10 min</b><span>Estimated planning-analysis cycle</span></li>
+                <li><b>82% faster</b><span>Data-first loading refinement</span></li>
+                <li><b>6 patterns</b><span>Reusable canvas components</span></li>
+              </ul>
               <div class="project-links">
                 <a class="project-link" href="./plan-insights/">Read case study</a>
                 <a class="project-link secondary" href="./plan-insights/engineering/">Engineering notes</a>
@@ -464,15 +664,24 @@
           <article class="project-entry">
             <div class="project-visual" aria-hidden="true">
               <span class="project-number">02 / OPERATIONS</span>
-              <div>
-                <h3>Order Intake</h3>
-                <span class="project-system">Planner workflow · Angular</span>
-              </div>
-              <div class="mini-flow">
-                <span>detect</span>
-                <span>notify</span>
-                <span>explain</span>
-                <span>resolve</span>
+              <div class="preview-window">
+                <div class="preview-toolbar">
+                  <span><i></i><i></i><i></i> Reservation explicability</span>
+                  <span>Planner workflow · Angular</span>
+                </div>
+                <div class="order-preview">
+                  <div class="preview-pills"><span>Blocked</span><span>Ready</span><span>Pending</span></div>
+                  <div class="preview-table">
+                    <span class="head">Demand</span><span class="head">Status</span><span class="head">Blocker</span>
+                    <span>DM-24871</span><span>Blocked</span><span>Date conflict</span>
+                    <span>DM-25104</span><span>Ready</span><span>None</span>
+                    <span>DM-25339</span><span>Pending</span><span>In progress</span>
+                  </div>
+                  <div class="preview-detail">
+                    <div><strong>Reservation history</strong><br />Created → reviewed → blocker detected</div>
+                    <div><strong>Explanation</strong><br />The planned date precedes the facility-ready date.</div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -481,6 +690,11 @@
               <p class="project-byline">Workflow research · UX architecture · Angular implementation · UAT</p>
               <p class="project-description">I designed and built a workflow that helped capacity planners understand why a demand had not started reservation, inspect meaningful history and exception evidence, and resolve eligible issues without reconstructing context across systems.</p>
               <p class="project-description"><strong>The interesting part:</strong> making changing business rules, data discrepancies, AI assistance, and higher-risk remediation feel like one coherent and trustworthy product.</p>
+              <ul class="project-proof" aria-label="Order Intake delivery evidence">
+                <li><b>Production</b><span>Launched and iterated through use</span></li>
+                <li><b>2 modes</b><span>Explanation and guarded resolution</span></li>
+                <li><b>15 UI PRs</b><span>Completed project-title frontend changes</span></li>
+              </ul>
               <div class="project-links">
                 <a class="project-link" href="./order-intake/">Read case study</a>
                 <a class="project-link secondary" href="./order-intake/engineering/">Engineering notes</a>
@@ -528,7 +742,7 @@
   <footer>
     <div class="shell footer-inner">
       <span>&copy; 2026 Simran Desai</span>
-      <a href="#top">Back to top</a>
+      <span><a href="mailto:sim.desai17@gmail.com">sim.desai17@gmail.com</a> · <a href="#top">Back to top</a></span>
     </div>
   </footer>
 </body>
