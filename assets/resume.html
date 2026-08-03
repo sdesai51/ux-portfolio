@@ -75,8 +75,8 @@
       background: var(--cp-bg);
       color: var(--cp-text);
       font-family: "Segoe UI", Aptos, Calibri, -apple-system, BlinkMacSystemFont, sans-serif;
-      font-size: 9.35pt;
-      line-height: 1.34;
+      font-size: 10pt;
+      line-height: 1.32;
     }
     a { color: var(--cp-text); text-decoration: none; }
     a:focus-visible { outline: 3px solid var(--cp-accent); outline-offset: 3px; }
@@ -84,7 +84,7 @@
       width: 8.5in;
       min-height: 11in;
       margin: 0 auto 1.25rem;
-      padding: 0.42in 0.52in;
+      padding: 0.42in 0.55in;
       background: var(--cp-surface);
       box-shadow: 0 0 2px var(--cp-border), 0 1px 2px var(--cp-border);
     }
@@ -93,87 +93,81 @@
       grid-template-columns: 1fr auto;
       align-items: end;
       gap: 1rem;
-      padding-bottom: 0.18in;
-      border-bottom: 5px solid var(--cp-accent);
+      padding-bottom: 0.13in;
+      border-bottom: 4px solid var(--cp-accent);
     }
     h1 {
       margin: 0;
-      font-size: 27pt;
+      font-size: 26pt;
       font-weight: 550;
       letter-spacing: -0.045em;
       line-height: 1;
     }
     .headline {
-      margin: 0.08in 0 0;
+      margin: 0.045in 0 0;
       color: var(--cp-text-muted);
-      font-size: 10pt;
+      font-size: 9.7pt;
     }
     .contact {
       display: grid;
-      gap: 0.03in;
+      grid-template-columns: auto auto;
+      gap: 0.02in 0.12in;
       text-align: right;
-      font-size: 8.4pt;
+      font-size: 8.3pt;
     }
     .contact a { color: var(--cp-accent); }
-    section { margin-top: 0.17in; }
+    section { margin-top: 0.14in; }
     h2 {
-      margin: 0 0 0.08in;
-      padding-bottom: 0.035in;
+      margin: 0 0 0.045in;
+      padding-bottom: 0.025in;
       border-bottom: 1px solid var(--cp-border-strong);
       color: var(--cp-accent);
-      font-size: 10pt;
+      font-size: 9.8pt;
       font-weight: 750;
       letter-spacing: 0.1em;
       text-transform: uppercase;
     }
     p { margin: 0; }
     .summary { color: var(--cp-text-muted); }
-    .job { margin-top: 0.12in; }
+    .job { margin-top: 0.09in; }
     .job:first-of-type { margin-top: 0; }
     .job-heading {
       display: flex;
       justify-content: space-between;
       gap: 0.2in;
-      margin-bottom: 0.045in;
+      margin-bottom: 0.025in;
     }
-    .job-heading strong { font-size: 9.8pt; }
+    .job-heading strong { font-size: 9.7pt; }
     .job-heading span {
       flex: 0 0 auto;
       color: var(--cp-text-muted);
-      font-size: 8.5pt;
+      font-size: 8.4pt;
     }
     ul {
       margin: 0;
-      padding-left: 0.18in;
+      padding-left: 0.16in;
     }
-    li { margin: 0 0 0.035in; }
+    li { margin: 0 0 0.018in; }
     li::marker { color: var(--cp-accent); }
     .two-column {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.28in;
+      gap: 0.22in;
     }
     .detail-row {
       display: flex;
       justify-content: space-between;
       gap: 0.2in;
-      margin-bottom: 0.04in;
+      margin-bottom: 0.02in;
     }
     .detail-row span { color: var(--cp-text-muted); }
     .skills {
       display: grid;
-      gap: 0.07in;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.035in 0.2in;
     }
     .skills p { color: var(--cp-text-muted); }
     .skills b { color: var(--cp-text); }
-    .page-note {
-      margin-top: 0.16in;
-      padding-top: 0.08in;
-      border-top: 1px solid var(--cp-border);
-      color: var(--cp-text-muted);
-      font-size: 7.7pt;
-    }
-
     @page { size: letter; margin: 0; }
     @media print {
       html { color-scheme: light; }
@@ -185,9 +179,7 @@
       .page {
         margin: 0;
         box-shadow: none;
-        break-after: page;
       }
-      .page:last-child { break-after: auto; }
     }
     @media (max-width: 760px) {
       body { padding: 0; }
@@ -200,6 +192,7 @@
       .resume-header { grid-template-columns: 1fr; }
       .contact { text-align: left; }
       .two-column { grid-template-columns: 1fr; }
+      .skills { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -220,7 +213,7 @@
 
     <section>
       <h2>Summary</h2>
-      <p class="summary">Full-stack engineer with 3+ years of experience designing and building AI-powered platforms and enterprise web applications for global data-center supply chain and capacity planning. I work across workflow research, interaction design, coded prototyping, frontend systems, agentic experiences, cloud infrastructure, UAT, and production iteration.</p>
+      <p class="summary">UX-focused full-stack engineer with 3+ years of experience designing and building AI-powered platforms and enterprise applications for global data-center supply chain and capacity planning. I work across research, interaction design, coded prototyping, frontend systems, UAT, and production iteration.</p>
     </section>
 
     <section>
@@ -231,13 +224,13 @@
           <span>September 2022 – Present</span>
         </div>
         <ul>
-          <li>Designed and deployed an AI-powered order explicability workflow using Azure AI Foundry and Angular, replacing fragmented email triage with notifications, blocker visualization, reservation history, deeplinks, and guarded remediation. The broader program targeted an 8% improvement in on-time reservations; that outcome is not attributed solely to the interface.</li>
-          <li>Architected a React and Cosmos DB plan-explicability experience that reduced a supported capacity-planning analysis cycle from 160 minutes to 10 minutes and carried an estimated savings of approximately 20 hours per month; presented results in a senior leadership business review.</li>
-          <li>Built a C# Azure AI Foundry agent for plan-audit history with agent-to-agent integration, PostgreSQL prefiltering, and dynamic query generation, reducing audit investigation time by 80% and distributing the implementation as a shared library.</li>
-          <li>Engineered a DSPy Python agent with a feedback loop on a Kubernetes-hosted AI platform to generate advanced SQL drill-down queries, doubling the analytical capability available to SQL-based report templates.</li>
-          <li>Redesigned the data-first loading architecture for supply-chain analytics, reducing load time by 82% from 45 seconds to 8 seconds, growing active users by 30%, and reducing new-user ramp-up time by 50%.</li>
-          <li>Built reusable React controls, visualizations, grids, and event contracts as the first production use case on an internal AI canvas, enabling faster onboarding for later teams and supporting a 4–5× increase in daily tool adoption through end-user UAT.</li>
-          <li>Automated Azure resource provisioning using Bicep infrastructure as code, deployment slots, Cosmos DB feature flags, and Azure Front Door routing, enabling zero-downtime deployments and reducing rollback time by 40 minutes.</li>
+          <li>Designed and deployed an AI-powered order explicability workflow with Azure AI Foundry and Angular, replacing fragmented email triage with notifications, blocker evidence, reservation history, deeplinks, and guarded remediation; the broader program targeted an 8% improvement in on-time reservations.</li>
+          <li>Architected a React and Cosmos DB plan-explicability experience that reduced a supported analysis cycle from 160 minutes to 10 minutes and carried an estimated savings of ~20 hours/month; presented results in a senior leadership review.</li>
+          <li>Built a C# Azure AI Foundry plan-audit agent with agent-to-agent integration, PostgreSQL prefiltering, and dynamic query generation, reducing investigation time by 80% and distributing the implementation as a shared library.</li>
+          <li>Engineered a DSPy Python agent with a Kubernetes-hosted feedback loop that generated advanced SQL drill-down queries and doubled the analytical capability of SQL-based report templates.</li>
+          <li>Redesigned supply-chain analytics loading, reducing load time by 82% from 45 seconds to 8 seconds, growing active users by 30%, and reducing new-user ramp-up time by 50%.</li>
+          <li>Built reusable React controls, visualizations, grids, and event contracts for an internal AI canvas, accelerating later team onboarding and supporting a 4–5× increase in daily adoption through UAT.</li>
+          <li>Automated Azure provisioning with Bicep, deployment slots, feature flags, and Azure Front Door routing, enabling zero-downtime deployments and reducing rollback time by 40 minutes.</li>
         </ul>
       </div>
 
@@ -247,35 +240,17 @@
           <span>May 2021 – August 2021</span>
         </div>
         <ul>
-          <li>Designed and launched an issue-management system that reduced deployment issue identification and mitigation time by 95% for internal stakeholders.</li>
-          <li>Gathered requirements from automation teams and delivered an MVP within 12 weeks, increasing internal satisfaction and reducing manual work.</li>
+          <li>Gathered requirements and delivered an issue-management MVP in 12 weeks, reducing deployment issue identification and mitigation time by 95%.</li>
         </ul>
       </div>
-    </section>
-  </article>
 
-  <article class="page">
-    <header class="resume-header">
-      <div>
-        <h1>Simran Desai</h1>
-        <p class="headline">UX Engineer · Design Engineer · Full-Stack Software Engineer</p>
-      </div>
-      <div class="contact">
-        <a href="mailto:sim.desai17@gmail.com">sim.desai17@gmail.com</a>
-        <a href="https://sdesai51.github.io/ux-portfolio/">sdesai51.github.io/ux-portfolio</a>
-      </div>
-    </header>
-
-    <section>
-      <h2>Experience, continued</h2>
       <div class="job">
         <div class="job-heading">
           <strong>Explore Intern — Microsoft · Redmond, WA</strong>
           <span>May 2020 – August 2020</span>
         </div>
         <ul>
-          <li>Built reusable UI components that improved accessibility compliance and reduced development time by 99%, enabling faster delivery of internal tools.</li>
-          <li>Defined KPIs and created a customer-success survey; applied the feedback to improve supplier interaction workflows through targeted UX changes.</li>
+          <li>Built accessible reusable UI components that reduced development time by 99%, then used customer-success survey feedback to improve supplier workflows.</li>
         </ul>
       </div>
     </section>
@@ -283,8 +258,7 @@
     <div class="two-column">
       <section>
         <h2>Education</h2>
-        <p><strong>Bachelor of Science in Computer Science</strong></p>
-        <div class="detail-row"><span>University of Illinois Urbana-Champaign</span><span>2022</span></div>
+        <div class="detail-row"><strong>B.S. Computer Science · UIUC</strong><span>2022</span></div>
         <p>GPA: 3.77 / 4.00 · Dean’s List · RTC Fellow</p>
       </section>
 
@@ -298,16 +272,12 @@
     <section>
       <h2>Skills</h2>
       <div class="skills">
-        <p><b>UX engineering:</b> Workflow research, interaction design, coded prototyping, agentic UI/UX, information architecture, design systems, accessibility, UAT, telemetry-driven iteration</p>
+        <p><b>UX engineering:</b> Workflow research, interaction design, coded prototyping, agentic UI/UX, accessibility, UAT, telemetry</p>
         <p><b>Languages and frameworks:</b> C#, Python, TypeScript, SQL, Angular, React, DSPy, HTML, CSS</p>
-        <p><b>AI and agentic systems:</b> Azure AI Foundry, agent-to-agent integration, dynamic query generation, feedback-loop design, DSPy</p>
-        <p><b>Cloud and infrastructure:</b> Azure App Service, Azure Front Door, Azure Application Insights, Bicep, Kubernetes, Cosmos DB, PostgreSQL</p>
-        <p><b>DevOps and delivery:</b> Infrastructure as code, deployment slots, feature flags, zero-downtime deployment, CI/CD, cron automation, Git, Azure DevOps</p>
-        <p><b>Data and analytics:</b> Power BI, SQL drill-down analysis, P90 latency monitoring, product telemetry</p>
+        <p><b>AI and data:</b> Azure AI Foundry, A2A integration, dynamic query generation, DSPy, Power BI, product telemetry</p>
+        <p><b>Cloud and delivery:</b> Azure App Service, Front Door, Application Insights, Bicep, Kubernetes, Cosmos DB, PostgreSQL, CI/CD</p>
       </div>
     </section>
-
-    <p class="page-note">Public portfolio résumé. Personal phone number omitted intentionally. Program-level outcomes are distinguished from impact attributable solely to an interface.</p>
   </article>
 </body>
 </html>
