@@ -359,6 +359,32 @@
       .timeline article { grid-template-columns: 1fr; gap: 0.35rem; }
       .footer-inner { display: block; }
     }
+
+    /* Calm, open layout matching the primary portfolio pages. */
+    .title { padding: 5rem 0 4rem; }
+    .content section { margin-bottom: 5.5rem; }
+    .coordination-grid,
+    .components-grid {
+      gap: 0 2rem;
+      border: 0;
+    }
+    .coordination-grid div,
+    .component {
+      min-height: 0;
+      padding: 1.1rem 0 1.4rem;
+      border-top: 3px solid var(--cp-accent);
+      border-right: 0;
+      border-bottom: 1px solid var(--cp-border-strong);
+    }
+    .architecture,
+    .timeline { border-top-color: var(--cp-border-strong); }
+    .closing { padding-top: 2.5rem; }
+
+    @media (max-width: 620px) {
+      .title { padding: 3.5rem 0 3rem; }
+      .coordination-grid,
+      .components-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
