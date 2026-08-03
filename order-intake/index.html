@@ -374,6 +374,273 @@
     .mode ul { margin: 1rem 0 0; padding-left: 1.2rem; }
     .mode li { margin-bottom: 0.45rem; }
 
+    .prototype {
+      overflow: hidden;
+      margin-top: 1.5rem;
+      border: 1px solid var(--cp-border-strong);
+      background: var(--cp-surface);
+    }
+    .prototype-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--cp-border-strong);
+      background: var(--cp-surface-soft);
+    }
+    .mode-tabs,
+    .quick-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+    .mode-tab,
+    .quick-filter,
+    .action-button {
+      min-height: 38px;
+      padding: 0.45rem 0.7rem;
+      border: 1px solid var(--cp-border-strong);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .mode-tab:hover,
+    .quick-filter:hover { border-color: var(--cp-accent); }
+    .mode-tab[aria-selected="true"],
+    .quick-filter.active,
+    .action-button {
+      border-color: var(--cp-accent);
+      background: var(--cp-accent);
+      color: var(--cp-accent-fg);
+    }
+    .action-button:hover { background: var(--cp-accent-hover); }
+    .prototype-description {
+      margin: 0;
+      color: var(--cp-text-muted);
+      font-size: 0.78rem;
+      text-align: right;
+    }
+    .prototype-grid {
+      display: grid;
+      grid-template-columns: 190px minmax(0, 1fr) 260px;
+      min-height: 580px;
+    }
+    .prototype-filters,
+    .prototype-insight {
+      padding: 1rem;
+      background: var(--cp-bg-elevated);
+    }
+    .prototype-filters { border-right: 1px solid var(--cp-border); }
+    .prototype-insight { border-left: 1px solid var(--cp-border); }
+    .prototype-filters h3,
+    .prototype-insight h3 { margin-bottom: 0.8rem; }
+    .prototype-field { margin-bottom: 0.8rem; }
+    .prototype-field label {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: var(--cp-text-muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+    .prototype-field input,
+    .prototype-select {
+      width: 100%;
+      min-height: 38px;
+      padding: 0.45rem 0.55rem;
+      border: 1px solid var(--cp-border);
+      border-radius: 0.625rem;
+      background: var(--cp-surface);
+      color: var(--cp-text);
+      font: inherit;
+      font-size: 0.78rem;
+    }
+    .prototype-select {
+      display: flex;
+      align-items: center;
+      color: var(--cp-text-muted);
+    }
+    .prototype-filter-note {
+      margin: 1rem 0 0;
+      color: var(--cp-text-muted);
+      font-size: 0.75rem;
+    }
+    .prototype-workspace {
+      min-width: 0;
+      padding: 1rem;
+    }
+    .quick-filters { margin-bottom: 0.8rem; }
+    .quick-filter { min-height: 34px; padding: 0.35rem 0.6rem; }
+    .demand-table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--cp-border);
+    }
+    .demand-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.74rem;
+      text-align: left;
+    }
+    .demand-table th,
+    .demand-table td {
+      padding: 0.65rem 0.55rem;
+      border-bottom: 1px solid var(--cp-border);
+      white-space: nowrap;
+    }
+    .demand-table th {
+      background: var(--cp-surface-soft);
+      color: var(--cp-text-muted);
+      font-size: 0.68rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .demand-table tbody tr { cursor: pointer; }
+    .demand-table tbody tr:hover,
+    .demand-table tbody tr.selected { background: var(--cp-accent-soft); }
+    .demand-table tbody tr:last-child td { border-bottom: 0; }
+    .prototype-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-weight: 700;
+    }
+    .prototype-status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--cp-border-strong);
+    }
+    .prototype-status.blocked::before { background: var(--cp-danger); }
+    .prototype-status.ready::before { background: var(--cp-success); }
+    .prototype-status.pending::before { background: var(--cp-warning); }
+    .prototype-status.no-approval::before { background: var(--cp-accent); }
+    .prototype-detail {
+      margin-top: 0.8rem;
+      padding: 0.8rem;
+      border: 1px solid var(--cp-border);
+      background: var(--cp-bg-elevated);
+    }
+    .prototype-detail-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.7rem;
+    }
+    .prototype-detail-heading h3 { margin: 0; }
+    .prototype-events {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--cp-border);
+      border-left: 1px solid var(--cp-border);
+    }
+    .prototype-event {
+      min-height: 86px;
+      padding: 0.55rem;
+      border-right: 1px solid var(--cp-border);
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .prototype-event b {
+      display: block;
+      margin-bottom: 0.3rem;
+      font-size: 0.7rem;
+    }
+    .prototype-event span {
+      color: var(--cp-text-muted);
+      font-size: 0.66rem;
+    }
+    .prototype-kicker {
+      margin-bottom: 0.35rem;
+      color: var(--cp-accent);
+      font-size: 0.7rem;
+      font-weight: 750;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+    .prototype-insight > p,
+    .prototype-insight li {
+      color: var(--cp-text-muted);
+      font-size: 0.8rem;
+    }
+    .prototype-insight ul { padding-left: 1.1rem; }
+    .assistant-note,
+    .resolution-box {
+      margin-top: 0.9rem;
+      padding: 0.75rem;
+      border: 1px solid var(--cp-border);
+      background: var(--cp-surface);
+    }
+    .assistant-note b {
+      display: block;
+      margin-bottom: 0.3rem;
+      color: var(--cp-accent);
+      font-size: 0.72rem;
+    }
+    .assistant-note span {
+      color: var(--cp-text-muted);
+      font-size: 0.78rem;
+    }
+    .resolution-box p { margin-bottom: 0.65rem; font-size: 0.8rem; }
+    .prototype-toast {
+      min-height: 1.4rem;
+      margin-top: 0.55rem;
+      color: var(--cp-success);
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .build-timeline {
+      margin-top: 1.5rem;
+      border-top: 1px solid var(--cp-border-strong);
+    }
+    .build-step {
+      display: grid;
+      grid-template-columns: 110px 1fr 0.72fr;
+      gap: 1.25rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--cp-border);
+    }
+    .build-step time {
+      color: var(--cp-accent);
+      font-size: 0.75rem;
+      font-weight: 750;
+      text-transform: uppercase;
+    }
+    .build-step p { margin: 0; color: var(--cp-text-muted); }
+    .build-step .risk {
+      padding-left: 1rem;
+      border-left: 1px solid var(--cp-border);
+      font-size: 0.85rem;
+    }
+
+    .uat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--cp-border-strong);
+      border-left: 1px solid var(--cp-border-strong);
+    }
+    .uat-note {
+      min-height: 180px;
+      padding: 1rem;
+      border-right: 1px solid var(--cp-border-strong);
+      border-bottom: 1px solid var(--cp-border-strong);
+    }
+    .uat-note small {
+      display: block;
+      margin-bottom: 0.55rem;
+      color: var(--cp-accent);
+      font-size: 0.72rem;
+      font-weight: 750;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .uat-note p { margin: 0; color: var(--cp-text-muted); font-size: 0.9rem; }
+
     .iteration-table {
       width: 100%;
       margin-top: 1.5rem;
@@ -471,6 +738,18 @@
       .sidebar-inner { position: static; }
       .section-nav { grid-template-columns: 1fr 1fr; }
       .workflow { grid-template-columns: 1fr 1fr; }
+      .prototype-grid { grid-template-columns: 170px minmax(0, 1fr); }
+      .prototype-insight {
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--cp-border);
+        border-left: 0;
+      }
+      .build-step { grid-template-columns: 100px 1fr; }
+      .build-step .risk {
+        grid-column: 2;
+        padding: 0;
+        border-left: 0;
+      }
     }
 
     @media (max-width: 620px) {
@@ -486,10 +765,18 @@
       .method-list,
       .principle-list,
       .modes,
+      .uat-grid,
       .role-list { grid-template-columns: 1fr; }
       .option,
       .outcome-list li { grid-template-columns: 1fr; gap: 0.4rem; }
       .workflow { grid-template-columns: 1fr; }
+      .prototype-toolbar { align-items: flex-start; flex-direction: column; }
+      .prototype-description { text-align: left; }
+      .prototype-grid { grid-template-columns: 1fr; }
+      .prototype-filters { border-right: 0; border-bottom: 1px solid var(--cp-border); }
+      .prototype-events { grid-template-columns: 1fr 1fr; }
+      .build-step { grid-template-columns: 1fr; gap: 0.35rem; }
+      .build-step .risk { grid-column: auto; }
       .iteration-table,
       .iteration-table tbody,
       .iteration-table tr,
@@ -558,7 +845,9 @@
             <a href="#research">how I learned</a>
             <a href="#exploration">design exploration</a>
             <a href="#solution">the solution</a>
-            <a href="#iterations">iterations</a>
+            <a href="#prototype">interactive walkthrough</a>
+            <a href="#evolution">implementation</a>
+            <a href="#iterations">feedback and UAT</a>
             <a href="#role">my contribution</a>
             <a href="#outcomes">outcomes</a>
             <a href="#reflection">what I learned</a>
@@ -737,6 +1026,166 @@
           <p>This decision was as much a UX choice as a technical one. The interface had to communicate eligibility, proposed changes, prior actions, and completed outcomes clearly enough for someone to make a responsible decision.</p>
         </section>
 
+        <section id="prototype" aria-labelledby="prototype-heading">
+          <h2 class="section-head" id="prototype-heading">interactive walkthrough</h2>
+          <p>I wanted portfolio viewers to be able to experience the hierarchy rather than only read about it. This small walkthrough preserves the two modes, high-frequency filters, row-to-detail behavior, event history, explanation, and guarded remediation from the earlier version of this case study.</p>
+          <p>Switch modes, filter the demand list, and select a row to see how the evidence and action panels stay connected.</p>
+
+          <div class="prototype">
+            <div class="prototype-toolbar">
+              <div class="mode-tabs" role="tablist" aria-label="Experience mode">
+                <button class="mode-tab" type="button" role="tab" data-mode="explain" aria-selected="true">Explain a demand</button>
+                <button class="mode-tab" type="button" role="tab" data-mode="resolve" aria-selected="false">Resolve eligible blockers</button>
+              </div>
+              <p class="prototype-description" id="mode-description">Understand status, exceptions, and history.</p>
+            </div>
+
+            <div class="prototype-grid">
+              <aside class="prototype-filters" aria-label="Demand filters">
+                <h3>Filter demands</h3>
+                <div class="prototype-field">
+                  <label for="prototype-search">Order or demand ID</label>
+                  <input id="prototype-search" type="search" placeholder="Search…" />
+                </div>
+                <div class="prototype-field">
+                  <label>Region</label>
+                  <div class="prototype-select">All regions</div>
+                </div>
+                <div class="prototype-field">
+                  <label>Resource type</label>
+                  <div class="prototype-select">All resource types</div>
+                </div>
+                <div class="prototype-field">
+                  <label>Planned date horizon</label>
+                  <div class="prototype-select">Next 13 weeks</div>
+                </div>
+                <div class="prototype-field">
+                  <label>Tags</label>
+                  <div class="prototype-select">Any tag</div>
+                </div>
+                <p class="prototype-filter-note">Frequent status controls stay above the grid. Attribute-heavy filters remain in the side panel.</p>
+              </aside>
+
+              <div class="prototype-workspace">
+                <div class="quick-filters" aria-label="Demand status filters">
+                  <button class="quick-filter active" type="button" data-filter="all">All</button>
+                  <button class="quick-filter" type="button" data-filter="blocked">Blocked</button>
+                  <button class="quick-filter" type="button" data-filter="ready">Ready</button>
+                  <button class="quick-filter" type="button" data-filter="pending">Pending</button>
+                  <button class="quick-filter" type="button" data-filter="no-approval">No approval</button>
+                </div>
+
+                <div class="demand-table-wrap">
+                  <table class="demand-table">
+                    <thead>
+                      <tr>
+                        <th scope="col">Demand</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Region</th>
+                        <th scope="col">Planned date</th>
+                        <th scope="col">Active blocker</th>
+                      </tr>
+                    </thead>
+                    <tbody id="demand-rows"></tbody>
+                  </table>
+                </div>
+
+                <div class="prototype-detail">
+                  <div class="prototype-detail-heading">
+                    <h3 id="detail-title">Demand DM-24871</h3>
+                    <span class="prototype-status blocked" id="detail-status">Blocked</span>
+                  </div>
+                  <div class="prototype-events" id="event-timeline"></div>
+                </div>
+              </div>
+
+              <aside class="prototype-insight" aria-label="Demand explanation and action">
+                <p class="prototype-kicker" id="insight-kicker">Explanation</p>
+                <h3 id="insight-title">The planned date is earlier than the facility-ready date.</h3>
+                <p id="insight-copy">Reservation cannot begin until the demand’s planned date meets the required readiness date.</p>
+                <div class="assistant-note" id="assistant-note">
+                  <b>Conversational assistance</b>
+                  <span>“Why is this demand blocked?” returns the active exception and supporting dates without hiding the underlying evidence.</span>
+                </div>
+                <ul id="insight-list">
+                  <li>Current planned date: Aug 12</li>
+                  <li>Earliest valid date: Aug 28</li>
+                  <li>Action owner: Planning</li>
+                </ul>
+                <div class="resolution-box" id="resolution-box" hidden>
+                  <p><strong>Proposed fix:</strong> Move the planned date to Aug 28.</p>
+                  <button class="action-button" type="button" id="apply-fix">Apply eligible fix</button>
+                  <div class="prototype-toast" id="prototype-toast" aria-live="polite"></div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section id="evolution" aria-labelledby="evolution-heading">
+          <h2 class="section-head" id="evolution-heading">how the product evolved</h2>
+          <p>The interaction model and the frontend matured together. Each stage answered a new user question or reduced a different product risk.</p>
+
+          <div class="build-timeline">
+            <article class="build-step">
+              <time>February</time>
+              <div>
+                <h3>Model the workflow</h3>
+                <p>Created the route, sidebar, grid, details area, and visual event history around the first set of planner questions.</p>
+              </div>
+              <p class="risk"><strong>Reduced risk:</strong> established the interaction model before live-data integration.</p>
+            </article>
+            <article class="build-step">
+              <time>Late February</time>
+              <div>
+                <h3>Connect operational data</h3>
+                <p>Integrated reservation-horizon data, dynamic columns, filter state, and selected-demand details.</p>
+              </div>
+              <p class="risk"><strong>Reduced risk:</strong> tested the design against real schemas and contracts.</p>
+            </article>
+            <article class="build-step">
+              <time>Early March</time>
+              <div>
+                <h3>Add evidence and explanation</h3>
+                <p>Connected exception data, status quick filters, event history, and conversational context.</p>
+              </div>
+              <p class="risk"><strong>Improved trust:</strong> explanations could be checked against supporting records.</p>
+            </article>
+            <article class="build-step">
+              <time>Mid March</time>
+              <div>
+                <h3>Add resolution</h3>
+                <p>Created a separate resolution view, eligibility behavior, remediation results, and repeat-action prevention.</p>
+              </div>
+              <p class="risk"><strong>Controlled risk:</strong> informational and action-oriented tasks stayed distinct.</p>
+            </article>
+            <article class="build-step">
+              <time>Before UAT</time>
+              <div>
+                <h3>Harden core interactions</h3>
+                <p>Added richer filters, chip inputs, autocomplete, status logic, and collapsible grids.</p>
+              </div>
+              <p class="risk"><strong>Improved control:</strong> dense operational dimensions became easier to scan.</p>
+            </article>
+            <article class="build-step">
+              <time>UAT</time>
+              <div>
+                <h3>Align the workflow</h3>
+                <p>Added fixability, intent, and tag filters while aligning behavior between explanation and resolution.</p>
+              </div>
+              <p class="risk"><strong>Improved usability:</strong> documented findings became shipped changes.</p>
+            </article>
+            <article class="build-step">
+              <time>Production</time>
+              <div>
+                <h3>Preserve context</h3>
+                <p>Corrected filtered selection, added auto-scroll and deeplinks, restored fields, and clarified empty-history states.</p>
+              </div>
+              <p class="risk"><strong>Improved continuity:</strong> the workflow held together across entry points and states.</p>
+            </article>
+          </div>
+        </section>
+
         <section id="iterations" aria-labelledby="iterations-heading">
           <h2 class="section-head" id="iterations-heading">how feedback changed the product</h2>
           <p>The strongest evidence in this project is not a polished final screen. It is the sequence of specific changes that came directly from use.</p>
@@ -785,6 +1234,44 @@
           </table>
         </section>
 
+        <section aria-labelledby="uat-heading">
+          <h2 class="section-head" id="uat-heading">what UAT exposed</h2>
+          <p>UAT was not a final sign-off step. It showed where the system’s internal model and the planner’s mental model did not match.</p>
+
+          <div class="uat-grid">
+            <article class="uat-note">
+              <small>Blocker-by-blocker validation</small>
+              <h3>Records appeared in one view but not another.</h3>
+              <p>I helped align the scope criteria while preserving the legitimate difference between explanation and resolution populations.</p>
+            </article>
+            <article class="uat-note">
+              <small>Status-model feedback</small>
+              <h3>“Blocked” and “ready” were not enough.</h3>
+              <p>The status model expanded to represent completed, pending, and missing-approval states.</p>
+            </article>
+            <article class="uat-note">
+              <small>Changing policy</small>
+              <h3>Approval rules changed during delivery.</h3>
+              <p>I updated filters and status behavior rather than leaving users to infer why records disappeared.</p>
+            </article>
+            <article class="uat-note">
+              <small>Production debugging</small>
+              <h3>Filtered bulk selection included more rows than expected.</h3>
+              <p>Selection handling was corrected so the submitted action matched the visible, eligible population.</p>
+            </article>
+            <article class="uat-note">
+              <small>Interaction feedback</small>
+              <h3>Users lost the selected row’s details below the grid.</h3>
+              <p>I added automatic focus and scrolling to the evidence section after selection.</p>
+            </article>
+            <article class="uat-note">
+              <small>Lifecycle feedback</small>
+              <h3>Resolved demands could invite duplicate action.</h3>
+              <p>Completed remediation became unavailable and the post-fix state was made explicit.</p>
+            </article>
+          </div>
+        </section>
+
         <section id="role" aria-labelledby="role-heading">
           <h2 class="section-head" id="role-heading">my contribution</h2>
           <p>I worked across discovery, design, implementation, and rollout. I did not own the backend business logic or the operational process alone; I partnered closely with the engineers and domain experts who did.</p>
@@ -828,7 +1315,7 @@
             </li>
             <li>
               <b>Engineering depth</b>
-              <span>The initial release and follow-up improvements were delivered across a sustained series of frontend changes rather than a single page implementation.</span>
+              <span>Fifteen completed UI pull requests under the project title covered the initial design, implementation, UAT, and rollout period, followed by additional production refinements.</span>
             </li>
           </ul>
 
@@ -861,5 +1348,217 @@
       <a href="../">Back to selected work</a>
     </div>
   </footer>
+
+  <script>
+    const prototypeDemands = [
+      {
+        id: "DM-24871",
+        status: "blocked",
+        statusLabel: "Blocked",
+        region: "North",
+        date: "Aug 12",
+        blocker: "Readiness date conflict",
+        title: "The planned date is earlier than the facility-ready date.",
+        copy: "Reservation cannot begin until the demand's planned date meets the required readiness date.",
+        bullets: ["Current planned date: Aug 12", "Earliest valid date: Aug 28", "Action owner: Planning"],
+        events: [["Order created", "Jul 18"], ["Plan updated", "Jul 26"], ["Blocker detected", "Aug 02"], ["Awaiting action", "Today"]]
+      },
+      {
+        id: "DM-25104",
+        status: "ready",
+        statusLabel: "Ready",
+        region: "West",
+        date: "Sep 03",
+        blocker: "None",
+        title: "No active blocker is preventing reservation.",
+        copy: "The demand is inside the planning horizon and currently meets the readiness rules.",
+        bullets: ["Approval: Active", "Active exceptions: 0", "Reservation start: Sep 03"],
+        events: [["Order created", "Jul 22"], ["Approval active", "Jul 29"], ["Checks passed", "Aug 03"], ["Ready", "Today"]]
+      },
+      {
+        id: "DM-25339",
+        status: "pending",
+        statusLabel: "Pending",
+        region: "East",
+        date: "Aug 21",
+        blocker: "Reservation in progress",
+        title: "Reservation has started but has not completed.",
+        copy: "No manual fix is recommended. The workflow is waiting for the downstream reservation process.",
+        bullets: ["Reservation started: Aug 05", "Last event: Requested", "Manual action: None"],
+        events: [["Order created", "Jul 12"], ["Checks passed", "Jul 31"], ["Reservation started", "Aug 05"], ["Pending", "Today"]]
+      },
+      {
+        id: "DM-25782",
+        status: "no-approval",
+        statusLabel: "No approval",
+        region: "South",
+        date: "Aug 19",
+        blocker: "Execution approval",
+        title: "The demand is not approved for execution.",
+        copy: "Reservation will not begin until the execution-approval state is active.",
+        bullets: ["Approval state: Draft", "Active exceptions: 0", "Action owner: Planning"],
+        events: [["Order created", "Jul 20"], ["Plan reviewed", "Jul 28"], ["Approval draft", "Aug 01"], ["Not executable", "Today"]]
+      }
+    ];
+
+    let prototypeMode = "explain";
+    let prototypeFilter = "all";
+    let selectedPrototypeDemand = prototypeDemands[0];
+    const remediatedDemandIds = new Set();
+
+    const demandRows = document.getElementById("demand-rows");
+    const prototypeSearch = document.getElementById("prototype-search");
+    const detailTitle = document.getElementById("detail-title");
+    const detailStatus = document.getElementById("detail-status");
+    const eventTimeline = document.getElementById("event-timeline");
+    const insightTitle = document.getElementById("insight-title");
+    const insightCopy = document.getElementById("insight-copy");
+    const insightList = document.getElementById("insight-list");
+    const insightKicker = document.getElementById("insight-kicker");
+    const assistantNote = document.getElementById("assistant-note");
+    const resolutionBox = document.getElementById("resolution-box");
+    const prototypeToast = document.getElementById("prototype-toast");
+    const modeDescription = document.getElementById("mode-description");
+    const applyFixButton = document.getElementById("apply-fix");
+
+    function getVisiblePrototypeDemands() {
+      const term = prototypeSearch.value.trim().toLowerCase();
+      return prototypeDemands.filter((demand) => {
+        const matchesFilter = prototypeFilter === "all" || demand.status === prototypeFilter;
+        const matchesSearch =
+          !term ||
+          demand.id.toLowerCase().includes(term) ||
+          demand.blocker.toLowerCase().includes(term);
+        const matchesMode = prototypeMode === "explain" || demand.status === "blocked";
+        return matchesFilter && matchesSearch && matchesMode;
+      });
+    }
+
+    function selectPrototypeDemand(id) {
+      selectedPrototypeDemand = prototypeDemands.find((demand) => demand.id === id);
+      renderPrototypeRows();
+      renderPrototypeDetail();
+    }
+
+    function renderPrototypeRows() {
+      const visible = getVisiblePrototypeDemands();
+
+      if (visible.length === 0) {
+        demandRows.innerHTML = '<tr><td colspan="5">No demands match the current filters.</td></tr>';
+        return;
+      }
+
+      if (!visible.some((demand) => demand.id === selectedPrototypeDemand.id)) {
+        selectedPrototypeDemand = visible[0];
+        renderPrototypeDetail();
+      }
+
+      demandRows.innerHTML = visible.map((demand) => `
+        <tr data-id="${demand.id}" class="${demand.id === selectedPrototypeDemand.id ? "selected" : ""}" tabindex="0">
+          <td><strong>${demand.id}</strong></td>
+          <td><span class="prototype-status ${demand.status}">${demand.statusLabel}</span></td>
+          <td>${demand.region}</td>
+          <td>${demand.date}</td>
+          <td>${demand.blocker}</td>
+        </tr>
+      `).join("");
+
+      demandRows.querySelectorAll("tr[data-id]").forEach((row) => {
+        row.addEventListener("click", () => selectPrototypeDemand(row.dataset.id));
+        row.addEventListener("keydown", (event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            selectPrototypeDemand(row.dataset.id);
+          }
+        });
+      });
+    }
+
+    function renderPrototypeDetail() {
+      const wasRemediated = remediatedDemandIds.has(selectedPrototypeDemand.id);
+      detailTitle.textContent = `Demand ${selectedPrototypeDemand.id}`;
+      detailStatus.textContent = wasRemediated ? "Fix submitted" : selectedPrototypeDemand.statusLabel;
+      detailStatus.className = `prototype-status ${wasRemediated ? "ready" : selectedPrototypeDemand.status}`;
+      insightTitle.textContent = selectedPrototypeDemand.title;
+      insightCopy.textContent = selectedPrototypeDemand.copy;
+      insightList.innerHTML = selectedPrototypeDemand.bullets
+        .map((bullet) => `<li>${bullet}</li>`)
+        .join("");
+      eventTimeline.innerHTML = selectedPrototypeDemand.events
+        .map(([name, date]) => `<div class="prototype-event"><b>${name}</b><span>${date}</span></div>`)
+        .join("");
+      prototypeToast.textContent = wasRemediated
+        ? "Fix submitted. Repeat action is disabled."
+        : "";
+
+      if (prototypeMode === "resolve") {
+        insightKicker.textContent = "Eligible resolution";
+        assistantNote.hidden = true;
+        resolutionBox.hidden = selectedPrototypeDemand.status !== "blocked";
+        applyFixButton.disabled = wasRemediated;
+        applyFixButton.textContent = wasRemediated ? "Fix already submitted" : "Apply eligible fix";
+      } else {
+        insightKicker.textContent = "Explanation";
+        assistantNote.hidden = false;
+        resolutionBox.hidden = true;
+      }
+    }
+
+    function selectMode(tab) {
+      prototypeMode = tab.dataset.mode;
+      document.querySelectorAll(".mode-tab").forEach((item) => {
+        item.setAttribute("aria-selected", String(item === tab));
+        item.tabIndex = item === tab ? 0 : -1;
+      });
+      modeDescription.textContent = prototypeMode === "explain"
+        ? "Understand status, exceptions, and history."
+        : "Act only on blockers that meet the approved rules.";
+      prototypeFilter = "all";
+      document.querySelectorAll(".quick-filter").forEach((item) => {
+        item.classList.toggle("active", item.dataset.filter === "all");
+      });
+      if (prototypeMode === "resolve" && selectedPrototypeDemand.status !== "blocked") {
+        selectedPrototypeDemand = prototypeDemands[0];
+      }
+      renderPrototypeRows();
+      renderPrototypeDetail();
+    }
+
+    document.querySelectorAll(".mode-tab").forEach((tab, index, tabs) => {
+      tab.tabIndex = tab.getAttribute("aria-selected") === "true" ? 0 : -1;
+      tab.addEventListener("click", () => selectMode(tab));
+      tab.addEventListener("keydown", (event) => {
+        let nextIndex;
+        if (event.key === "ArrowRight") nextIndex = (index + 1) % tabs.length;
+        if (event.key === "ArrowLeft") nextIndex = (index - 1 + tabs.length) % tabs.length;
+        if (event.key === "Home") nextIndex = 0;
+        if (event.key === "End") nextIndex = tabs.length - 1;
+        if (nextIndex !== undefined) {
+          event.preventDefault();
+          tabs[nextIndex].focus();
+          selectMode(tabs[nextIndex]);
+        }
+      });
+    });
+
+    document.querySelectorAll(".quick-filter").forEach((filter) => {
+      filter.addEventListener("click", () => {
+        prototypeFilter = filter.dataset.filter;
+        document.querySelectorAll(".quick-filter").forEach((item) => {
+          item.classList.toggle("active", item === filter);
+        });
+        renderPrototypeRows();
+      });
+    });
+
+    prototypeSearch.addEventListener("input", renderPrototypeRows);
+    applyFixButton.addEventListener("click", () => {
+      remediatedDemandIds.add(selectedPrototypeDemand.id);
+      renderPrototypeDetail();
+    });
+
+    renderPrototypeRows();
+    renderPrototypeDetail();
+  </script>
 </body>
 </html>
