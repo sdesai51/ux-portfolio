@@ -1015,6 +1015,80 @@
       .case-layout { grid-template-columns: 200px 1fr; gap: 2rem; }
       .sidebar-inner { position: static; }
     }
+
+    /* Keep the experience calm and editorial rather than dashboard-like. */
+    .case-title { padding: 5rem 0 4rem; }
+    .product-hero { padding: 3.5rem 0 4rem; }
+    .product-frame {
+      border-color: var(--cp-border-strong);
+      box-shadow: none;
+    }
+    .product-preview { grid-template-columns: minmax(0, 1fr) 280px; }
+    .product-filter-panel { display: none; }
+    .product-explanation { background: transparent; }
+    .evidence-strip {
+      gap: 0 1.5rem;
+      border-top-color: var(--cp-border-strong);
+      border-left: 0;
+    }
+    .evidence-strip li {
+      min-height: 86px;
+      padding: 0.85rem 0;
+      border-right: 0;
+      border-bottom-color: var(--cp-border-strong);
+    }
+    .story section { margin-bottom: 5.5rem; }
+    .question-list,
+    .workflow,
+    .uat-grid,
+    .role-list {
+      gap: 0 2rem;
+      border: 0;
+    }
+    .question-list p,
+    .workflow div,
+    .uat-note,
+    .role-list div {
+      min-height: 0;
+      padding: 1.1rem 0 1.4rem;
+      border-right: 0;
+      border-bottom: 1px solid var(--cp-border-strong);
+      background: transparent;
+    }
+    .question-list p,
+    .workflow div,
+    .uat-note,
+    .role-list div {
+      border-top: 3px solid var(--cp-accent);
+    }
+    .method-list,
+    .principle-list { gap: 2rem 2.5rem; }
+    .option.selected { background: transparent; }
+    .modes { gap: 3rem; }
+    .prototype { border-color: var(--cp-border-strong); }
+    .prototype-filters,
+    .prototype-insight { background: transparent; }
+    .reflection { background: transparent; }
+    .closing { padding-top: 2.5rem; }
+
+    @media (max-width: 900px) {
+      .product-preview { grid-template-columns: 1fr; }
+      .product-explanation {
+        grid-column: auto;
+        border-top: 1px solid var(--cp-border);
+        border-left: 0;
+      }
+      .evidence-strip { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 620px) {
+      .case-title { padding: 3.5rem 0 3rem; }
+      .product-hero { padding: 2.5rem 0 3rem; }
+      .evidence-strip,
+      .question-list,
+      .workflow,
+      .uat-grid,
+      .role-list { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>

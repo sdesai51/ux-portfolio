@@ -345,6 +345,38 @@
       .state-flow { grid-template-columns: 1fr; }
       .footer-inner { display: block; }
     }
+
+    /* Calm, open layout matching the primary portfolio pages. */
+    .title { padding: 5rem 0 4rem; }
+    .content section { margin-bottom: 5.5rem; }
+    .mode-table,
+    .state-flow {
+      gap: 0 1.5rem;
+      border: 0;
+    }
+    .mode-table > div,
+    .state-flow div {
+      min-height: 0;
+      padding: 1rem 0 1.3rem;
+      border-right: 0;
+      border-bottom: 1px solid var(--cp-border-strong);
+      background: transparent;
+    }
+    .mode-table .head,
+    .state-flow div {
+      border-top: 3px solid var(--cp-accent);
+    }
+    .decision-list,
+    .timeline,
+    .architecture { border-top-color: var(--cp-border-strong); }
+    .closing { padding-top: 2.5rem; }
+
+    @media (max-width: 620px) {
+      .title { padding: 3.5rem 0 3rem; }
+      .mode-table,
+      .state-flow { grid-template-columns: 1fr; }
+      .mode-table .head { background: transparent; }
+    }
   </style>
 </head>
 <body>
